@@ -1,0 +1,8 @@
+<resources>
+    <string name="zalo_flutter_app_id">984903888253106979</string>
+    <string name="zalo_flutter_app_id_protocol">zalo-984903888253106979</string>
+</resources>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appID" translatable="false">984903888253106979</string>
+</resources> -->
