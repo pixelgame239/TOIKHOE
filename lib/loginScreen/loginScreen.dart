@@ -69,6 +69,21 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(20),
+                child: TextButton(
+                  onPressed: (){
+
+                  }, 
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        child: Image.asset('assets/GoogleLogin.png', fit: BoxFit.cover)
+                      ),
+                      const Text(' Đăng nhập bằng Google')
+                    ],
+                  )
+                  ),
                 ),
               Padding(
                 padding: const EdgeInsets.all(20),

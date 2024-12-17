@@ -2,49 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:toikhoe/mainScreen/benh_an_screen.dart';
 import 'package:toikhoe/mainScreen/bsck_Screen.dart';
 
-class ToiKhoeHome extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ToiKhoe Home',
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-      ),
-      home: HomeScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.account_circle, color: Colors.white),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Chào mừng\n ABC XYZ',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {}),
-        ],
-      ),
-      body: SingleChildScrollView(
+class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex=2;
+  Widget? _screen(int currentIndex){
+    if(currentIndex==2){
+      return
+      SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // GridView for Top Menu Options
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 200,
               child: GridView.count(
                 crossAxisCount: 4,
@@ -121,12 +97,44 @@ class HomeScreen extends StatelessWidget {
             MedicalRecordCard(),
           ],
         ),
+      );
+    }
+    else{
+      return BacsickScreen();
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.account_circle, color: Colors.white),
+          onPressed: () {},
+        ),
+        title: Text(
+          'Chào mừng\n ABC XYZ',
+          style:  TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {}),
+        ],
       ),
+      body: _screen(currentIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
-        currentIndex: 2,
+        currentIndex: currentIndex,
+        onTap:(index){
+          setState(() {
+            currentIndex =index;
+          });
+        },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Bác sĩ'),
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
@@ -136,8 +144,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
-  } //BuildContext
-} // HomeScreen
+  } } // HomeScreen
 
 // Custom Widgets
 
@@ -217,7 +224,7 @@ class QnACard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: ListTile(
         title: Text(title,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.blueAccent)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +252,7 @@ class HealthCheckCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(price, style: TextStyle(color: Colors.red)),
