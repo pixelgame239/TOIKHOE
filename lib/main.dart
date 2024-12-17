@@ -318,11 +318,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return profile!;
   }
 
-  // void logOut() async {
-  //   bool? isLoggedOut = await flutterZalo.logOut();
-  //   showMessage(isLoggedOut! ? "Logged out" : "Failed to log out");
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -335,18 +330,18 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const VerticalDivider(),
               TextButton(
                 onPressed: logIn,
                 child: Row(
                   children: [
-                    Image.asset('ZaloLogin.png'),
+                    SizedBox(
+                      height: 20,
+                      child: Image.asset('assets/ZaloLogin.jpg', fit: BoxFit.cover)
+                    ),
                     const Text('Đăng nhập bằng Zalo')
                   ],
                 )
-                  
                 ),
-                // color: Theme.of(context).accentColor,
               const VerticalDivider(),
             ],
           ),
