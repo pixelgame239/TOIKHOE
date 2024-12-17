@@ -244,8 +244,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
-import 'package:flutter_zalo/flutter_zalo.dart';
-import 'package:toikhoe/MainScreen/homeScreen.dart';
+import 'package:toikhoe/loginScreen/loginScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -253,100 +252,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Zalo',
-      home: MyHomePage(title: 'Flutter Zalo'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  FlutterZalo flutterZalo = FlutterZalo();
-
-  @override
-  void initState() {
-    super.initState();
-    flutterZalo.init();
-  }
-
-  showMessage(String msg) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-    ));
-    print(msg);
-  }
-
-  void logIn() async {
-    bool? result = await flutterZalo.logIn();
-    if(result!){
-      showMessage("Logged in");
-      final userData = await getProfile();
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(profile: userData)));
-    }
-    else{
-      showMessage('Failed to log in');
-    }
-  }
-
-  // void isAccessTokenValid() async {
-  //   bool? isValid = await flutterZalo.isAccessTokenValid();
-  //   showMessage("Is access token valid:\n$isValid");
-  // }
-
-  // void getAccessToken() async {
-  //   String? accessToken = await flutterZalo.getAccessToken();
-  //   showMessage("Access Token:\n$accessToken");
-  // }
-
-  // void refreshAccessToken() async {
-  //   bool? isRefreshed = await flutterZalo.refreshAccessToken();
-  //   showMessage("Refreshed access token:\n$isRefreshed");
-  // }
-
-  Future<Map<String, dynamic>> getProfile() async {
-    Map<String, dynamic>? profile = await flutterZalo.getProfile();
-    showMessage("Profile:\n$profile");
-    return profile!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title, style: const TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blue,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextButton(
-                onPressed: logIn,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      child: Image.asset('assets/ZaloLogin.jpg', fit: BoxFit.cover)
-                    ),
-                    const Text('Đăng nhập bằng Zalo')
-                  ],
-                )
-                ),
-              const VerticalDivider(),
-            ],
-          ),
-        ),
-      ),
+      home: MyHomePage(),
     );
   }
 }
