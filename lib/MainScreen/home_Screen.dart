@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/mainScreen/benh_an_screen.dart';
 import 'package:toikhoe/mainScreen/bsck_Screen.dart';
 
 class ToiKhoeHome extends StatelessWidget {
@@ -60,7 +61,15 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  HomeMenuItem('Bác sĩ yêu thích', Icons.favorite),
+                  HomeMenuItem('Bệnh án', Icons.favorite,                    
+                  onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MedicalRecordsScreen(),
+                        ),
+                      );
+                    },),
                   HomeMenuItem('Bác sĩ của tôi', Icons.person),
                   HomeMenuItem('Lịch nhắc', Icons.calendar_today),
                   HomeMenuItem('Phòng khám', Icons.meeting_room),
