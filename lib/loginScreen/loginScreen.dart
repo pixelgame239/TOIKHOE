@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zalo/flutter_zalo.dart';
-import 'package:toikhoe/MainScreen/homeScreen.dart';
+import 'package:toikhoe/mainScreen/home_Screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if(result!){
       showMessage("Logged in");
       final userData = await getProfile();
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(profile: userData)));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
     }
     else{
       showMessage('Failed to log in');
@@ -74,7 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(20),
                 child: TextButton(
                   style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.white)),
-                  onPressed: logIn,
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                  },
+                  // onPressed: logIn,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

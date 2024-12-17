@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/mainScreen/bsck_Screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  final profile;
-
-  const HomeScreen({super.key, required this.profile});
-  
+class ToiKhoeHome extends StatelessWidget {
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'ToiKhoe Home',
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+      ),
+      home: HomeScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState(){
-    print(widget.profile);
-    super.initState();
-  }
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.account_circle, color: Colors.blue),
-          onPressed: () async{
-            Navigator.pop(context);
-          },
+          icon: Icon(Icons.account_circle, color: Colors.white),
+          onPressed: () {},
         ),
         title: Text(
-          widget.profile['name'],
+          'Chào mừng\n ABC XYZ',
           style: TextStyle(
-              color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.notifications, color: Colors.blue),
+              icon: Icon(Icons.notifications, color: Colors.white),
               onPressed: () {}),
         ],
       ),
@@ -51,7 +50,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
                 children: [
-                  HomeMenuItem('Bác sĩ chuyên khoa', Icons.local_hospital),
+                  HomeMenuItem('Bác sĩ chuyên khoa', Icons.local_hospital,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BacsickScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   HomeMenuItem('Bác sĩ yêu thích', Icons.favorite),
                   HomeMenuItem('Bác sĩ của tôi', Icons.person),
                   HomeMenuItem('Lịch nhắc', Icons.calendar_today),
@@ -119,29 +127,34 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-}
+  } //BuildContext
+} // HomeScreen
 
 // Custom Widgets
 
 class HomeMenuItem extends StatelessWidget {
   final String title;
   final IconData icon;
+  final VoidCallback? onTap;
 
-  HomeMenuItem(this.title, this.icon);
+  HomeMenuItem(this.title, this.icon, {this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 35, color: Colors.blue),
-        SizedBox(height: 5),
-        Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 35, color: Colors.blue),
+          SizedBox(height: 5),
+          Text(title,
+              textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
-}
+} // HomeMenuItem
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -159,7 +172,7 @@ class SectionHeader extends StatelessWidget {
       ),
     );
   }
-}
+} //SectionHeader
 
 class HealthNewsCard extends StatelessWidget {
   final String title;
@@ -180,7 +193,7 @@ class HealthNewsCard extends StatelessWidget {
       trailing: Icon(Icons.arrow_forward_ios, size: 16),
     );
   }
-}
+} //HealthNewCard
 
 class QnACard extends StatelessWidget {
   final String title;
@@ -210,7 +223,7 @@ class QnACard extends StatelessWidget {
       ),
     );
   }
-}
+} //QnACard
 
 class HealthCheckCard extends StatelessWidget {
   final String title;
@@ -235,7 +248,7 @@ class HealthCheckCard extends StatelessWidget {
       ),
     );
   }
-}
+} //HealthCheckCard
 
 class MedicalRecordCard extends StatelessWidget {
   @override
@@ -255,4 +268,5 @@ class MedicalRecordCard extends StatelessWidget {
       ),
     );
   }
-}
+} //MedicalRecordCard
+
