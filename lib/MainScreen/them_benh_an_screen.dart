@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
-import 'package:toikhoe/firestore.dart/firestore.dart';
 import 'package:toikhoe/model/benh_an_model.dart';
 
 class themBenhAnScreen extends StatefulWidget {
@@ -511,10 +510,6 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                           soTheBHYT: _soTheBHYTController.text,
                           hinhAnh: _image != null ? _image!.path : '',
                         );
-
-                        // Thêm bệnh án vào Firestore hoặc cơ sở dữ liệu
-                        await addBenhAn(benhAn.toMap());
-
                         // Hiển thị thông báo thành công
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

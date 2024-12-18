@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toikhoe/MainScreen/benh_an_screen.dart';
 import 'package:toikhoe/MainScreen/bsck_Screen.dart';
+import 'package:toikhoe/MainScreen/bscuatoi_screen.dart';
+import 'package:toikhoe/MainScreen/bsyeuthich_screen.dart';
 
 class HomeElement extends StatefulWidget {
   const HomeElement({super.key});
@@ -19,7 +21,7 @@ class _HomeElementState extends State<HomeElement> {
           children: [
             // GridView for Top Menu Options
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               height: 200,
               child: GridView.count(
                 crossAxisCount: 4,
@@ -45,8 +47,18 @@ class _HomeElementState extends State<HomeElement> {
                         ),
                       );
                     },),
-                  HomeMenuItem('Bác sĩ của tôi', Icons.person),
-                  HomeMenuItem('Lịch nhắc', Icons.calendar_today),
+                  HomeMenuItem('Bác sĩ của tôi', Icons.person, onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyDoctorScreen(),
+                        ),
+                      )),
+                  HomeMenuItem('Lịch nhắc', Icons.calendar_today, onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FavoriteDoctorsScreen(),
+                        ),
+                      ),),
                   HomeMenuItem('Phòng khám', Icons.meeting_room),
                   HomeMenuItem('Hỏi bác sĩ', Icons.chat),
                   HomeMenuItem('Dịch vụ tại nhà', Icons.home),

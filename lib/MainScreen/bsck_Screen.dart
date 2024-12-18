@@ -110,10 +110,10 @@ class _BacsickScreenState extends State<BacsickScreen> {
     double screenWidth = MediaQuery.sizeOf(context).width;
     double screenHeight = MediaQuery.sizeOf(context).height;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Bác sĩ chuyên khoa'),
-      //   backgroundColor: Colors.blue,
-      // ),
+      appBar: AppBar(
+        title: Text('Bác sĩ chuyên khoa'),
+        backgroundColor: Colors.blue,
+      ),
       body: Column(
         children: [
           // Horizontal list for specialties

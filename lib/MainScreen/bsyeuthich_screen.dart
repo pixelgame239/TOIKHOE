@@ -79,10 +79,9 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                 children: [
                   CircleAvatar(
                     backgroundImage:
-                    AssetImage('assets/doctor_avatar.png'), // Thay ảnh phù hợp
-                    radius: 28,
+                    AssetImage('assets/ZaloLogin.jpg'), // Thay ảnh phù hợp
+                    radius: 20,
                   ),
-                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,40 +104,45 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                         SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.star,
-                                color: Colors.amber, size: 16),
+                            Expanded(
+                              child: Icon(Icons.star,
+                                  color: Colors.amber, size: 16),
+                            ),
                             SizedBox(width: 4),
                             Text(doctor['rating']!,
-                                style: TextStyle(fontSize: 14)),
+                                 overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                                ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          minimumSize: Size(80, 36),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            minimumSize: Size(40, 18),
+                          ),
+                          child: Text(
+                            'Xem hồ sơ',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
-                        child: Text(
-                          'Xem hồ sơ',
-                          style:
-                          TextStyle(color: Colors.white, fontSize: 12),
+                        SizedBox(height: 8),
+                        IconButton(
+                          icon: Icon(Icons.favorite, color: Colors.red),
+                          onPressed: () {
+                            removeDoctor(index); // Xóa bác sĩ khỏi danh sách
+                          },
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      IconButton(
-                        icon: Icon(Icons.favorite, color: Colors.red),
-                        onPressed: () {
-                          removeDoctor(index); // Xóa bác sĩ khỏi danh sách
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

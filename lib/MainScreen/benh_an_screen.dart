@@ -8,10 +8,10 @@ class MedicalRecordsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medical Records'),
+        title: Text('Bệnh án'),
       ),
       body: Center(
-        child: Text('Medical Records Screen'),
+        child: Text('Bệnh án'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
