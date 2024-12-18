@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
-import 'package:toikhoe/mainScreen/benh_an_screen.dart';
-import 'package:toikhoe/mainScreen/bsck_Screen.dart';
+import 'package:toikhoe/additionalScreen/notification_screen.dart';
+import 'package:toikhoe/additionalScreen/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex=2;
   Widget? _screen(int currentIndex){
     if(currentIndex==2){
-      return HomeElement();      
+      return const HomeElement();      
     }
     else{
 
@@ -28,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.blue,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.account_circle, color: Colors.white),
-          onPressed: () {},
+          icon: const Icon(Icons.account_circle, color: Colors.white),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen())),
         ),
         title: const Text(
           'Chào mừng\n ABC XYZ',
@@ -39,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {}),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotiScreen()));
+              }),
         ],
       ),
       body: _screen(currentIndex),
