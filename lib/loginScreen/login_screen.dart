@@ -106,7 +106,7 @@ class _MyHomePageState extends State<LoginScreen> {
                 TextButton(onPressed: (){
                   validateLogin(widget.userController.text, widget.passController.text);
                   if(widget.valid==true){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                   }
                 },
                 style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent), fixedSize: WidgetStateProperty.all(Size(500, 20))),
