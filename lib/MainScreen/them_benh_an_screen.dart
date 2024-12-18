@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:toikhoe/firestore.dart/firestore.dart';
+import 'package:toikhoe/model/benh_an_model.dart';
 
 class themBenhAnScreen extends StatefulWidget {
   const themBenhAnScreen({super.key});
@@ -71,14 +73,14 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text(errorMessage),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -95,7 +97,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thêm Bệnh Án'),
+        title: const Text('Thêm Bệnh Án'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -113,7 +115,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Trường tải ảnh
                 GestureDetector(
                   onTap: () async {
@@ -126,8 +128,8 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     }
                   },
                   child: Container(
-                    padding:
-                        EdgeInsets.all(16.0), // Padding inside the container
+                    padding: const EdgeInsets.all(
+                        16.0), // Padding inside the container
                     decoration: BoxDecoration(
                       color: Colors.grey[
                           200], // Background color for the image picker area
@@ -149,7 +151,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                                 size: 60,
                                 color: Colors.grey[600], // Color for the icon
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 'Ảnh bệnh nhân',
                                 style: TextStyle(
@@ -173,12 +175,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Tên bệnh nhân
                 TextFormField(
                   controller: _tenController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Tên bệnh nhân',
                   ),
                   validator: (value) {
@@ -193,7 +195,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                   ],
                 ),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Ngày sinh
                 Row(
@@ -219,7 +221,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Tuổi
                 Text(
@@ -230,12 +232,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                   ),
                 ),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Giới tính
                 DropdownButtonFormField<String>(
                   value: _gender,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Giới tính',
                   ),
                   onChanged: (String? newValue) {
@@ -251,12 +253,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // dân tộc
                 TextFormField(
                   controller: _danTocController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Dân tộc',
                   ),
                   validator: (value) {
@@ -265,26 +267,25 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     }
                     return null;
                   },
-
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp('[a-zA-ZáéíóúàèìòùăâêôơưđñÁÉÍÓÚÀÈÌÒÙĂÂÊÔƠƯĐÑ]')),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // số nhà
                 TextFormField(
                     controller: _soNhaController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Số nhà',
                     )),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // thôn phố
                 TextFormField(
                   controller: _thonPhoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Thôn phố',
                   ),
                   validator: (value) {
@@ -294,12 +295,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // xã phường
                 TextFormField(
                   controller: _xaPhuongController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Xã, phường',
                   ),
                   validator: (value) {
@@ -309,12 +310,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Huyện
                 TextFormField(
                   controller: _huyenController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Huyện',
                   ),
                   validator: (value) {
@@ -324,12 +325,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 //Tỉnh thành phố
                 TextFormField(
                   controller: _tinhThanhPhoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Tỉnh, thành phố',
                   ),
                   validator: (value) {
@@ -339,12 +340,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // số thẻ BHYT
                 TextFormField(
                   controller: _soTheBHYTController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Số thẻ BHYT',
                   ),
                   autovalidateMode: AutovalidateMode
@@ -365,7 +366,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                   ],
                 ),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Ngày nhập viện
                 Row(
@@ -412,7 +413,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Heading "I. Chẩn đoán"
                 const Text(
@@ -426,7 +427,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                 // Chẩn đoán vào viện
                 TextFormField(
                   controller: _chanDoanVaoVienController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Chẩn đoán vào viện',
                   ),
                   validator: (value) {
@@ -436,12 +437,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Chẩn đoán ra viện
                 TextFormField(
                   controller: _chanDoanRaVienController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Chẩn đoán ra viện',
                   ),
                   validator: (value) {
@@ -451,7 +452,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 const Text(
                   'III. TÓM TẮT QUÁ TRÌNH ĐIỀU TRỊ',
@@ -464,7 +465,7 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                 //lý do vào viện
                 TextFormField(
                   controller: _liDoVaoVienController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Lý do vào viện',
                   ),
                   validator: (value) {
@@ -474,12 +475,12 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 //Lý do ra viện
                 TextFormField(
                   controller: _tomTatQuaTrinhBenhLyController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText:
                         'Tóm tắt quá trình bệnh lý và diễn biến lâm sàng',
                   ),
@@ -490,21 +491,39 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 // Nút gửi
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Lưu thông tin bệnh án
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Đã thêm bệnh án cho ${_tenController.text}')));
+                        BenhAnModel benhAn = BenhAnModel(
+                          ten: _tenController.text,
+                          danToc: _danTocController.text,
+                          ngaySinh: _ngaySinhDate.toIso8601String(),
+                          gender: _gender,
+                          ngayNhapVien: _ngayNhapVienDate.toIso8601String(),
+                          ngayRaVien: _ngayRaVienDate.toIso8601String(),
+                          chanDoanVaoVien: _chanDoanVaoVienController.text,
+                          chanDoanRaVien: _chanDoanRaVienController.text,
+                          soTheBHYT: _soTheBHYTController.text,
+                          hinhAnh: _image != null ? _image!.path : '',
+                        );
+
+                        // Thêm bệnh án vào Firestore hoặc cơ sở dữ liệu
+                        await addBenhAn(benhAn.toMap());
+
+                        // Hiển thị thông báo thành công
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Đã thêm bệnh án cho ${benhAn.ten}'),
+                          ),
+                        );
                       }
                     },
-                    child: Text('Thêm bệnh án'),
+                    child: const Text('Thêm bệnh án'),
                   ),
                 ),
               ],
