@@ -8,6 +8,17 @@ class MedicalRecordsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () {
+            // Xử lý khi nhấn nút
+            Navigator.pop(context);
+          },
+        ),
         title: Text('Bệnh án'),
       ),
       body: Center(
@@ -29,5 +40,3 @@ class MedicalRecordsScreen extends StatelessWidget {
     );
   }
 }
-
-
