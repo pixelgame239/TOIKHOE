@@ -96,6 +96,17 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () {
+            // Xử lý khi nhấn nút
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Thêm Bệnh Án'),
       ),
       body: SingleChildScrollView(
