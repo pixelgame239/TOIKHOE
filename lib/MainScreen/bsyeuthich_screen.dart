@@ -58,7 +58,9 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
+      body: favoriteDoctors.isEmpty
+          ? Center(child: Text('Không có bác sĩ yêu thích nào.'))
+          : ListView.builder(
         itemCount: favoriteDoctors.length,
         itemBuilder: (context, index) {
           final doctor = favoriteDoctors[index];
@@ -66,7 +68,7 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             elevation: 2,
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -74,7 +76,6 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                     backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
                     radius: 30,
                   ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,6 +84,7 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                           doctor['name']!,
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                           overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -95,45 +97,50 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                         Row(
                           children: [
                             const Icon(Icons.star, color: Colors.amber, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              doctor['rating']!,
-                              style: const TextStyle(fontSize: 14),
+                            Expanded(
+                              child: Text(
+                                doctor['rating']!,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Điều hướng sang màn hình thông tin bác sĩ khi nhấn nút
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DoctorDetailScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          minimumSize: const Size(80, 30),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Điều hướng sang màn hình thông tin bác sĩ khi nhấn nút
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorDetailScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            minimumSize: const Size(40, 20),
+                          ),
+                          child: const Text(
+                            'Xem hồ sơ',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
-                        child: const Text(
-                          'Xem hồ sơ',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        const SizedBox(height: 8),
+                        IconButton(
+                          icon: const Icon(Icons.favorite, color: Colors.red, size: 24),
+                          onPressed: () {
+                            removeDoctor(index);
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      IconButton(
-                        icon: const Icon(Icons.favorite, color: Colors.red, size: 24),
-                        onPressed: () {
-                          removeDoctor(index);
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

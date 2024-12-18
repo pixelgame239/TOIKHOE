@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(child: Image.asset('assets/ZaloLogin.jpg'), radius: 50),
+            CircleAvatar(backgroundImage: AssetImage('assets/ZaloLogin.jpg'), radius: 50),
             Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: TextFormField(
