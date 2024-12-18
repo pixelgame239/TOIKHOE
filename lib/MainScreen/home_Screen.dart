@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
         ],
       ),
-      body: _screen(currentIndex),
+      body: SingleChildScrollView(child: _screen(currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
