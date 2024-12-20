@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_zalo/flutter_zalo.dart';
+import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/loginScreen/register_screen.dart';
 import 'package:toikhoe/mainScreen/home_Screen.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -103,7 +107,8 @@ class _MyHomePageState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(),
-                TextButton(onPressed: (){
+                TextButton(onPressed: ()async{
+                  connectToRDS();
                   validateLogin(widget.userController.text, widget.passController.text);
                   if(widget.valid==true){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
