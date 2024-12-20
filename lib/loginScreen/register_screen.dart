@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/loginScreen/otp_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -44,7 +45,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Padding(padding: 
                 EdgeInsets.only(top: 20),
                 child: TextButton(
-                  onPressed: (){}, 
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpScreen()));
+                  }, 
                 child: Text('Đăng ký')),
               )
             ],
