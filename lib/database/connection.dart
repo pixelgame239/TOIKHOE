@@ -23,15 +23,13 @@ Future<MySqlConnection?> connectToRDS() async {
 
     // Duyệt qua kết quả và in trường 'ID'
     for (var row in result) {
-      print('ID: ${row['ID']}');
+      print(row['ID']);
     }
   } catch (e) {
-    print('Lỗi kết nối hoặc truy vấn: $e');
   } finally {
     // Đảm bảo đóng kết nối nếu đã mở
     if (conn != null) {
       await conn.close();
-      print('Đã đóng kết nối.');
     }
   }
 
