@@ -4,14 +4,20 @@ import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex=2;
+  bool showNavi = true;
+  ScrollController scrollController = ScrollController();
+  @override
+  void initState(){
+    scrollController.addListener(onScroll);
+    super.initState();
+  }
   Widget? _screen(int currentIndex){
     if(currentIndex==2){
       return const HomeElement();      
@@ -19,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     else{
 
     }
+  }
+  void onScroll(){
   }
   @override
   Widget build(BuildContext context) {
@@ -43,24 +51,27 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
         ],
       ),
-      body: SingleChildScrollView(child: _screen(currentIndex)),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        currentIndex: currentIndex,
-        onTap:(index){
-          setState(() {
-            currentIndex =index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Bác sĩ'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Tin nhắn'),
-          BottomNavigationBarItem(icon: Icon(Icons.apps), label: 'Tiện ích'),
-        ],
+      body: SingleChildScrollView(child: _screen(currentIndex), controller: scrollController,),
+      bottomNavigationBar: Visibility(
+        visible: showNavi,
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          currentIndex: currentIndex,
+          onTap:(index){
+            setState(() {
+              currentIndex =index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Bác sĩ'),
+            BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
+            BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Tin nhắn'),
+            BottomNavigationBarItem(icon: Icon(Icons.apps), label: 'Tiện ích'),
+          ],
+        ),
       ),
     );
   } } // HomeScreen
