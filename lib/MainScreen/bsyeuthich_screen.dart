@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/database/getBsprofile.dart';
+import 'package:toikhoe/model/bacsi_model.dart';
 import 'bs_info_screen.dart'; // Import màn hình thông tin bác sĩ
 
 class FavoriteDoctorsScreen extends StatefulWidget {
@@ -126,11 +128,14 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                           children: [
                             // Nút Xem hồ sơ
                             ElevatedButton.icon(
-                              onPressed: () {
+                              onPressed: () async {
+                                List<BacsiProfile> allDoc=[];
+                                await profileBS(allDoc);
+                                print(allDoc[index].hoten);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => DoctorDetailScreen(),
+                                    builder: (context) => DoctorDetailScreen(currDoc: allDoc[index],),
                                   ),
                                 );
                               },

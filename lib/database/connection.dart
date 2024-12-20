@@ -17,21 +17,8 @@ Future<MySqlConnection?> connectToRDS() async {
     // Tạo kết nối
     conn = await MySqlConnection.connect(settings);
     print('Kết nối thành công đến RDS.');
-
-    // Thực hiện truy vấn
-    final result = await conn.query("SELECT * FROM BacSi");
-
-    // Duyệt qua kết quả và in trường 'ID'
-    for (var row in result) {
-      print(row['ID']);
-    }
   } catch (e) {
-  } finally {
-    // Đảm bảo đóng kết nối nếu đã mở
-    if (conn != null) {
-      await conn.close();
-    }
+    print('Lỗi kết nối hoặc truy vấn: $e');
   }
-
   return conn;
 }
