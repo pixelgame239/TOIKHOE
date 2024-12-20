@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_zalo/flutter_zalo.dart';
 import 'package:toikhoe/database/connection.dart';
+import 'package:toikhoe/database/getBsprofile.dart';
 import 'package:toikhoe/loginScreen/register_screen.dart';
 import 'package:toikhoe/mainScreen/home_Screen.dart';
 import 'package:http/http.dart' as http;
@@ -18,12 +19,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<LoginScreen> {
-  FlutterZalo flutterZalo = FlutterZalo();
+  // FlutterZalo flutterZalo = FlutterZalo();
 
   @override
   void initState() {
     super.initState();
-    flutterZalo.init();
+    // flutterZalo.init();
   }
   void validateLogin(String userName, String password){
     if(password.length <6){
