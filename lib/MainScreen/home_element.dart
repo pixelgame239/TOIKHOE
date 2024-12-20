@@ -5,7 +5,7 @@ import 'package:toikhoe/MainScreen/bsck_Screen.dart';
 import 'package:toikhoe/MainScreen/bscuatoi_screen.dart';
 import 'package:toikhoe/MainScreen/bsyeuthich_screen.dart';
 import 'package:toikhoe/MainScreen/chat_screen.dart';
-import 'package:toikhoe/additionalScreen/nhac_nho_screen.dart';
+import 'package:toikhoe/reminderScreen/nhac_nho_screen.dart';
 
 class HomeElement extends StatefulWidget {
   const HomeElement({super.key});
