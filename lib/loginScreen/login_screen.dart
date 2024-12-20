@@ -1,173 +1,126 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_zalo/flutter_zalo.dart';
 import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/database/getBsprofile.dart';
+import 'package:toikhoe/MainScreen/home_screen.dart';
+import 'package:toikhoe/database/lay_ID_matKhau.dart';
 import 'package:toikhoe/loginScreen/register_screen.dart';
-import 'package:toikhoe/mainScreen/home_Screen.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
-  TextEditingController userController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  String errorPass = '';
-  bool valid = true;
+
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
+
 
 class _MyHomePageState extends State<LoginScreen> {
   // FlutterZalo flutterZalo = FlutterZalo();
+class _LoginScreenState extends State<LoginScreen> {
+  String errorMessage = '';
+  bool valid = true;
 
   @override
   void initState() {
     super.initState();
-    // flutterZalo.init();
+    initializeConnection(); // Khởi tạo kết nối RDS
   }
-  void validateLogin(String userName, String password){
-    if(password.length <6){
-      widget.errorPass='Mật khẩu cần phải có ít nhất 6 ký tự';
-      widget.valid=false;
+
+  Future<bool> authenticateUser(String userName, String password) async {
+    List<Map<String, String>> accounts = await fetchTaiKhoanInfo();
+
+    // Kiểm tra tài khoản và mật khẩu
+    for (var account in accounts) {
+      if (account['ID'] == userName && account['matKhau'] == password) {
+        return true; // Đăng nhập thành công
+      }
+    }
+    return false; // Đăng nhập thất bại
+  }
+
+  void validateAndLogin() async {
+    String userName = widget.userController.text.trim();
+    String password = widget.passController.text.trim();
+
+    // Kiểm tra đầu vào
+    if (userName.isEmpty || password.isEmpty) {
       setState(() {
+        errorMessage = 'Tài khoản và mật khẩu không được để trống';
+        valid = false;
+      });
+      return;
+    }
+
+    // Kiểm tra đăng nhập
+    bool isAuthenticated = await authenticateUser(userName, password);
+    if (isAuthenticated) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } else {
+      setState(() {
+        errorMessage = 'Sai tài khoản hoặc mật khẩu';
+        valid = false;
       });
     }
-    else{
-      widget.errorPass ='';
-      widget.valid=true;
-      setState(() {
-      });
-    }
   }
-  // showMessage(String msg) {
-  //   ScaffoldMessenger.of(context).clearSnackBars();
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text(msg),
-  //   ));
-  //   print(msg);
-  // }
-
-  // void logIn() async {
-  //   bool? result = await flutterZalo.logIn();
-  //   if(result!){
-  //     showMessage("Logged in");
-  //     final userData = await getProfile();
-  //     Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-  //   }
-  //   else{
-  //     showMessage('Failed to log in');
-  //   }
-  // }
-
-  // void isAccessTokenValid() async {
-  //   bool? isValid = await flutterZalo.isAccessTokenValid();
-  //   showMessage("Is access token valid:\n$isValid");
-  // }
-
-  // void getAccessToken() async {
-  //   String? accessToken = await flutterZalo.getAccessToken();
-  //   showMessage("Access Token:\n$accessToken");
-  // }
-
-  // void refreshAccessToken() async {
-  //   bool? isRefreshed = await flutterZalo.refreshAccessToken();
-  //   showMessage("Refreshed access token:\n$isRefreshed");
-  // }
-
-  // Future<Map<String, dynamic>> getProfile() async {
-  //   Map<String, dynamic>? profile = await flutterZalo.getProfile();
-  //   showMessage("Profile:\n$profile");
-  //   return profile!;
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                TextFormField(
-                  controller: widget.userController,
-                decoration: const InputDecoration(label: Text('Tài khoản'), hintText: 'Nhập tên tài khoản'),
-                ),
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               TextFormField(
-                  controller: widget.passController,
-                  obscureText: true,
-                  obscuringCharacter: '•',
-                  decoration: InputDecoration(label: const Text('Mật khẩu'), hintText: 'Nhập mật khẩu', 
-                  errorText: widget.valid
-                  ? null
-                  : widget.errorPass
-                  ),
+                controller: widget.userController,
+                decoration: const InputDecoration(
+                  labelText: 'Tài khoản',
+                  hintText: 'Nhập tên tài khoản',
                 ),
-                const SizedBox(),
-                TextButton(onPressed: ()async{
-                  connectToRDS();
-                  validateLogin(widget.userController.text, widget.passController.text);
-                  if(widget.valid==true){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                  }
-                },
-                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blueAccent), fixedSize: WidgetStateProperty.all(Size(500, 20))),
-                child: const Text('Đăng nhập', style: TextStyle(color: Colors.white),),),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Chưa có tài khoản?'),
-                    TextButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
-                    }, child: const Text('Đăng ký', style: TextStyle(color: Colors.blue),))
-                  ],
-                )
-                ]
               ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.all(20),
-            //   child: TextButton(
-            //     onPressed: (){
-        
-            //     }, 
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         SizedBox(
-            //           height: 20,
-            //           child: Image.asset('assets/GoogleLogin.png', fit: BoxFit.cover)
-            //         ),
-            //         const Text(' Đăng nhập bằng Google')
-            //       ],
-            //     )
-            //     ),
-            //   ),
-            // Padding(
-            //   padding: const EdgeInsets.all(20),
-            //   child: TextButton(
-            //     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.white)),
-            //     onPressed: (){
-            //       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-            //     },
-            //     // onPressed: logIn,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         SizedBox(
-            //           height: 20,
-            //           child: Image.asset('assets/ZaloLogin.jpg', fit: BoxFit.cover)
-            //         ),
-            //         const Text(' Đăng nhập bằng Zalo')
-            //       ],
-            //     )
-            //     ),
-            // ),
-          ],
+              TextFormField(
+                controller: widget.passController,
+                obscureText: true,
+                obscuringCharacter: '•',
+                decoration: InputDecoration(
+                  labelText: 'Mật khẩu',
+                  hintText: 'Nhập mật khẩu',
+                  errorText: valid ? null : errorMessage,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: validateAndLogin,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text('Đăng nhập'),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Chưa có tài khoản?'),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterScreen()));
+                    },
+                    child: const Text(
+                      'Đăng ký',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
