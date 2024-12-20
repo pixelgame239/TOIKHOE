@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class LichKhamScreen extends StatefulWidget {
   @override
-  State<LichKhamScreen> createState() =>
-      _LichKhamScreenState();
+  State<LichKhamScreen> createState() => _LichKhamScreenState();
 }
 
-class _LichKhamScreenState
-    extends State<LichKhamScreen> {
+class _LichKhamScreenState extends State<LichKhamScreen> {
   bool notifyBefore = false;
   bool repeatDaily = false;
 
@@ -35,86 +33,123 @@ class _LichKhamScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tiêu đề
-            SectionTitle(title: 'Tiêu đề'),
-            InputField(
-              label: 'Tiêu đề',
-              hintText: 'Tiêu đề',
+            // Cụm Tiêu đề
+            BorderedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: 'Tiêu đề'),
+                  InputField(
+                    label: 'Tiêu đề',
+                    hintText: 'Tiêu đề',
+                  ),
+                ],
+              ),
             ),
 
-            // Bác sĩ
-            SectionTitle(title: 'Bác sĩ'),
-            InputField(
-              label: 'Họ và tên bác sĩ',
-              hintText: 'Họ và tên bác sĩ',
-            ),
-            InputField(
-              label: 'Khoa làm việc',
-              hintText: 'Khoa làm việc của bác sĩ',
-            ),
-
-            // Thời gian
-            SectionTitle(title: 'Thời gian'),
-            InputField(
-              label: 'Ngày đặt lịch khám',
-              hintText: 'Ngày đặt lịch khám',
-            ),
-            InputField(
-              label: 'Giờ khám',
-              hintText: 'Giờ khám',
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Báo trước',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Switch(
-                  value: notifyBefore,
-                  onChanged: (value) {
-                    setState(() {
-                      notifyBefore = value;
-                    });
-                  },
-                  activeColor: Colors.green,
-                ),
-              ],
+            // Cụm Bác sĩ
+            BorderedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: 'Bác sĩ'),
+                  InputField(
+                    label: 'Họ và tên bác sĩ',
+                    hintText: 'Họ và tên bác sĩ',
+                  ),
+                  InputField(
+                    label: 'Khoa làm việc',
+                    hintText: 'Khoa làm việc của bác sĩ',
+                  ),
+                ],
+              ),
             ),
 
-            // Địa chỉ khám
-            SectionTitle(title: 'Địa chỉ khám'),
-            InputField(
-              label: 'Địa chỉ khám bệnh',
-              hintText: 'Địa chỉ khám bệnh',
+            // Cụm Thời gian
+            BorderedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: 'Thời gian'),
+                  InputField(
+                    label: 'Ngày đặt lịch khám',
+                    hintText: 'Ngày đặt lịch khám',
+                  ),
+                  InputField(
+                    label: 'Giờ khám',
+                    hintText: 'Giờ khám',
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Báo trước',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      Switch(
+                        value: notifyBefore,
+                        onChanged: (value) {
+                          setState(() {
+                            notifyBefore = value;
+                          });
+                        },
+                        activeColor: Colors.green,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
 
-            // Ghi chú
-            SectionTitle(title: 'Ghi chú'),
-            InputField(
-              label: 'Ghi chú',
-              hintText: 'Những điều chú ý (Tối đa 500 ký tự)',
-              maxLines: 3,
+            // Cụm Địa chỉ khám
+            BorderedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: 'Địa chỉ khám'),
+                  InputField(
+                    label: 'Địa chỉ khám bệnh',
+                    hintText: 'Địa chỉ khám bệnh',
+                  ),
+                ],
+              ),
             ),
 
-            // Lặp lại hàng ngày
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Lặp lại hàng ngày',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Switch(
-                  value: repeatDaily,
-                  onChanged: (value) {
-                    setState(() {
-                      repeatDaily = value;
-                    });
-                  },
-                  activeColor: Colors.green,
-                ),
-              ],
+            // Cụm Ghi chú
+            BorderedSection(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionTitle(title: 'Ghi chú'),
+                  InputField(
+                    label: 'Ghi chú',
+                    hintText: 'Những điều chú ý (Tối đa 500 ký tự)',
+                    maxLines: 3,
+                  ),
+                ],
+              ),
+            ),
+
+            // Cụm Lặp lại hàng ngày
+            BorderedSection(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Lặp lại hàng ngày',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  Switch(
+                    value: repeatDaily,
+                    onChanged: (value) {
+                      setState(() {
+                        repeatDaily = value;
+                      });
+                    },
+                    activeColor: Colors.green,
+                  ),
+                ],
+              ),
             ),
 
             // Nút hành động
@@ -175,7 +210,7 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
         style: const TextStyle(
@@ -213,6 +248,26 @@ class InputField extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class BorderedSection extends StatelessWidget {
+  final Widget child;
+
+  const BorderedSection({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: child,
     );
   }
 }

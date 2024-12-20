@@ -19,7 +19,11 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
         backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+          Navigator.pop(context); },
+        ),
         title: const Text(
           'Tạo lịch nhắc',
           style: TextStyle(
@@ -223,7 +227,6 @@ class ReminderItem extends StatelessWidget {
                 ),
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
           ],
         ),
       ),
