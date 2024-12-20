@@ -33,6 +33,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: widget.confirmController,
                 decoration: const InputDecoration(label: Text('Xác nhận mật khẩu')),
               ),
+               TextFormField(
+                controller: widget.homeController,
+                decoration: const InputDecoration(label: Text('Địa chỉ')),
+              ),
               TextFormField(
                 controller: widget.homeController,
                 decoration: const InputDecoration(label: Text('Quê quán')),
