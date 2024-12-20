@@ -22,7 +22,11 @@ class _ExerciseReminderScreenState
         centerTitle: true,
         elevation: 1,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context); },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
