@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/loginScreen/otp_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -33,6 +34,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: widget.confirmController,
                 decoration: const InputDecoration(label: Text('Xác nhận mật khẩu')),
               ),
+               TextFormField(
+                controller: widget.homeController,
+                decoration: const InputDecoration(label: Text('Địa chỉ')),
+              ),
               TextFormField(
                 controller: widget.homeController,
                 decoration: const InputDecoration(label: Text('Quê quán')),
@@ -40,7 +45,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Padding(padding: 
                 EdgeInsets.only(top: 20),
                 child: TextButton(
-                  onPressed: (){}, 
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpScreen()));
+                  }, 
                 child: Text('Đăng ký')),
               )
             ],
