@@ -5,6 +5,7 @@ import 'package:toikhoe/MainScreen/bsck_Screen.dart';
 import 'package:toikhoe/MainScreen/bscuatoi_screen.dart';
 import 'package:toikhoe/MainScreen/bsyeuthich_screen.dart';
 import 'package:toikhoe/MainScreen/chat_screen.dart';
+import 'package:toikhoe/reminderScreen/nhac_nho_screen.dart';
 
 class HomeElement extends StatefulWidget {
   const HomeElement({super.key});
@@ -80,14 +81,19 @@ class _HomeElementState extends State<HomeElement> {
                   ),
                 ),
               ),
-              HomeMenuItem('Dịch vụ tại nhà', Icons.home),
+              HomeMenuItem(
+                'Dịch vụ tại nhà',
+                Icons.home,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ReminderApp())),
+              ),
               HomeMenuItem('Xem thêm', Icons.more_horiz),
             ],
           ),
         ),
         SectionHeader(title: 'Bác sĩ nổi bật'),
         Text("sẽ thêm các bác sĩ nổi bật sau khi có db"),
-    
+
         // Doctor Q&A Section
         SectionHeader(title: 'Hỏi đáp với bác sĩ'),
         QnACard(
@@ -102,7 +108,7 @@ class _HomeElementState extends State<HomeElement> {
             title: 'Nội khoa',
             content: 'Cháu năm nay 18 tuổi ... xin bác sĩ tư vấn ...',
             doctor: 'BS. Nguyễn Ngọc Anh'),
-    
+
         // Health Check Section
         SectionHeader(title: 'Kiểm tra sức khỏe'),
         HealthCheckCard(

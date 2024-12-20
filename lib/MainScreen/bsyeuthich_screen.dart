@@ -59,50 +59,104 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
         ),
       ),
       body: favoriteDoctors.isEmpty
-          ? Center(child: Text('Không có bác sĩ yêu thích nào.'))
+          ? const Center(
+              child: Text(
+                'Không có bác sĩ yêu thích nào.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            )
           : ListView.builder(
-        itemCount: favoriteDoctors.length,
-        itemBuilder: (context, index) {
-          final doctor = favoriteDoctors[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
-                    radius: 30,
+              itemCount: favoriteDoctors.length,
+              itemBuilder: (context, index) {
+                final doctor = favoriteDoctors[index];
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          doctor['name']!,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                        // Avatar
+                        const CircleAvatar(
+                          backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
+                          radius: 30,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          doctor['title']!,
-                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 16),
-                            Expanded(
-                              child: Text(
-                                doctor['rating']!,
+                        const SizedBox(width: 12),
+                        // Thông tin bác sĩ
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                doctor['name']!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(fontSize: 14),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                doctor['title']!,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey[600]),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  const Icon(Icons.star,
+                                      color: Colors.orange, size: 16),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    doctor['rating']!,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            // Nút Xem hồ sơ
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DoctorDetailScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 6),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              label: const Text(
+                                'Xem hồ sơ',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Icon tim
+                            GestureDetector(
+                              onTap: () {
+                                removeDoctor(index);
+                              },
+                              child: const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 28,
                               ),
                             ),
                           ],
@@ -110,44 +164,9 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Điều hướng sang màn hình thông tin bác sĩ khi nhấn nút
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DoctorDetailScreen(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            minimumSize: const Size(40, 20),
-                          ),
-                          child: const Text(
-                            'Xem hồ sơ',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        IconButton(
-                          icon: const Icon(Icons.favorite, color: Colors.red, size: 24),
-                          onPressed: () {
-                            removeDoctor(index);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
