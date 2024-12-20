@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_zalo/flutter_zalo.dart';
-import 'package:toikhoe/database/connection.dart';
-import 'package:toikhoe/database/getBsprofile.dart';
 import 'package:toikhoe/MainScreen/home_screen.dart';
 import 'package:toikhoe/database/lay_ID_matKhau.dart';
 import 'package:toikhoe/loginScreen/register_screen.dart';
@@ -16,9 +13,6 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-
-class _MyHomePageState extends State<LoginScreen> {
-  // FlutterZalo flutterZalo = FlutterZalo();
 class _LoginScreenState extends State<LoginScreen> {
   String errorMessage = '';
   bool valid = true;
