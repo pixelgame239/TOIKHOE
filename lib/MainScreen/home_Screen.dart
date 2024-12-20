@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex=2;
   bool showNavi = true;
+  double last_position = 0;
   ScrollController scrollController = ScrollController();
   @override
   void initState(){
@@ -27,6 +28,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
   void onScroll(){
+    if (scrollController.offset > last_position && scrollController.offset > 0) {
+      // User scrolling down
+      if (showNavi) {
+        setState(() {
+          showNavi = false;
+        });
+      }
+    } else if (scrollController.offset < last_position) {
+      // User scrolling up
+      if (!showNavi) {
+        setState(() {
+          showNavi = true;
+        });
+      }
+    }
+    last_position = scrollController.offset;
   }
   @override
   Widget build(BuildContext context) {
