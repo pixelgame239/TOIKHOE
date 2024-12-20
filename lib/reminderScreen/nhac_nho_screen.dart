@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toikhoe/reminderScreen/tao_reminder_screen.dart';
 
+import '../MainScreen/home_Screen.dart';
+
 class ReminderApp extends StatefulWidget {
   @override
   State<ReminderApp> createState() => _ReminderAppState();
@@ -30,16 +32,16 @@ class ReminderScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-            size: 24,
-          ),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
           },
         ),
       ),
+
       backgroundColor: Colors.grey[200],
       body: Column(
         children: [
@@ -122,7 +124,7 @@ class ReminderScreen extends StatelessWidget {
   }
 }
 
-class ReminderItem extends StatelessWidget {
+class ReminderItem extends StatefulWidget {
   final String title;
   final String time;
   final String next;
@@ -138,6 +140,19 @@ class ReminderItem extends StatelessWidget {
   });
 
   @override
+  State<ReminderItem> createState() => _ReminderItemState();
+}
+
+class _ReminderItemState extends State<ReminderItem> {
+  late bool isActive;
+
+  @override
+  void initState() {
+    super.initState();
+    isActive = widget.isActive; // Lấy trạng thái ban đầu từ widget
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -146,22 +161,29 @@ class ReminderItem extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.blueAccent.withOpacity(0.2),
-          child: Icon(icon, color: Colors.blue),
+          child: Icon(widget.icon, color: Colors.blue),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
-          'Thời gian đặt lịch: $time\nLịch nhắc sẽ diễn ra: $next',
+          'Thời gian đặt lịch: ${widget.time}\nLịch nhắc sẽ diễn ra: ${widget.next}',
           style: const TextStyle(fontSize: 12),
         ),
-        trailing: Switch(
-          value: isActive,
-          onChanged: (value) {
-            // Xử lý bật/tắt
-          },
-          activeColor: Colors.green,
+        trailing: Transform.scale(
+          scale: 0.8, // Thu nhỏ Switch
+          child: Switch(
+            value: isActive,
+            onChanged: (value) {
+              setState(() {
+                isActive = value; // Cập nhật trạng thái
+              });
+            },
+            activeColor: Colors.green,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
         ),
       ),
     );
   }
 }
+
 
