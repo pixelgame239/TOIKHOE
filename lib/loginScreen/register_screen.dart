@@ -4,11 +4,12 @@ import 'package:toikhoe/loginScreen/otp_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
-  TextEditingController homeController = TextEditingController();
-  TextEditingController queQuanController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -17,17 +18,38 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
 
+  bool isPasswordValid(String password) {
+    // Biểu thức chính quy kiểm tra điều kiện mật khẩu
+    final regex = RegExp(r'^(?=.*[!@#\$%\^&\*])(?=.*[0-9]).{7,}$');
+    return regex.hasMatch(password);
+  }
+
   void registerUser() async {
+    String name = widget.nameController.text.trim();
+    String email = widget.emailController.text.trim();
     String phone = widget.phoneController.text.trim();
     String pass = widget.passController.text.trim();
     String confirmPass = widget.confirmController.text.trim();
-    String home = widget.homeController.text.trim();
-    String queQuan = widget.queQuanController.text.trim();
+    String address = widget.addressController.text.trim();
+    String role = 'Patient'; // Default role
+
+// Kiểm tra điều kiện mật khẩu
+    if (!isPasswordValid(pass)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              "Mật khẩu phải có ít nhất 7 ký tự, bao gồm ký tự đặc biệt và chữ số"),
+          duration:
+              const Duration(seconds: 5), // Hiển thị SnackBar trong 5 giây
+        ),
+      );
+      return;
+    }
 
     // Kiểm tra mật khẩu và xác nhận mật khẩu
     if (pass != confirmPass) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Mật khẩu không khớp")),
+        const SnackBar(content: Text("Mật khẩu không khớp")),
       );
       return;
     }
@@ -37,16 +59,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Gọi hàm insertTaiKhoan để thêm tài khoản vào cơ sở dữ liệu
-      bool isInserted = await insertTaiKhoan(
-        int.parse(
-            phone), // Sử dụng số điện thoại làm ID (hoặc bạn có thể sử dụng phương thức tạo ID tự động)
+      // Gọi hàm insertUser để thêm tài khoản vào cơ sở dữ liệu
+      bool isInserted = await insertUser(
+        name,
+        email,
         pass,
-        phone, // Hoặc bạn có thể thêm tên người dùng vào trường này
-        '1990-01-01', // Ngày sinh mặc định hoặc lấy từ input
-        queQuan,
-        home,
         phone,
+        address,
+        role,
       );
 
       if (isInserted) {
@@ -55,13 +75,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context, MaterialPageRoute(builder: (context) => OtpScreen()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Đăng ký thất bại")),
+          const SnackBar(content: Text("Đăng ký thất bại")),
         );
       }
     } catch (e) {
       print("Lỗi đăng ký: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Đã có lỗi xảy ra, vui lòng thử lại")),
+        const SnackBar(content: Text("Đã có lỗi xảy ra, vui lòng thử lại")),
       );
     } finally {
       setState(() {
@@ -74,13 +94,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đăng ký tài khoản'),
+        title: const Text('Đăng ký tài khoản'),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
+              TextFormField(
+                controller: widget.nameController,
+                decoration: const InputDecoration(label: Text('Họ và tên')),
+              ),
+              TextFormField(
+                controller: widget.emailController,
+                decoration: const InputDecoration(label: Text('Email')),
+              ),
               TextFormField(
                 controller: widget.phoneController,
                 decoration: const InputDecoration(label: Text('Số điện thoại')),
@@ -97,12 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 obscureText: true,
               ),
               TextFormField(
-                controller: widget.homeController,
+                controller: widget.addressController,
                 decoration: const InputDecoration(label: Text('Địa chỉ')),
-              ),
-              TextFormField(
-                controller: widget.queQuanController,
-                decoration: const InputDecoration(label: Text('Quê quán')),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
