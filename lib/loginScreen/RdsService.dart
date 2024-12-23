@@ -22,14 +22,14 @@ class RdsService {
   }
 
   Future<void> registerUser(
-      String name, String email, String phone, String address, String province, String role) async {
+      String name, String email, String phone, String address, String province, String role, String password) async {
     final conn = await connectToRDS(); // Kết nối tới RDS
     if (conn != null) {
       try {
         // Thực hiện câu lệnh INSERT vào bảng Users
         await conn.query(
-          'INSERT INTO Users (name, email, phone_number, address, status, role, province) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [name, email, phone, address, 'active', role, province],
+          'INSERT INTO Users (name, email, phone_number, address, status, role, province, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          [name, email, phone, address, 'active', role, province, password],
         );
         print('Dữ liệu đã được lưu vào cơ sở dữ liệu!');
       } catch (e) {
