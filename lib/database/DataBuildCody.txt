@@ -1,0 +1,129 @@
+-- Tạo bảng Users
+CREATE TABLE Users (
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15),
+    address TEXT,
+    role ENUM('Patient', 'Doctor', 'Admin') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tạo bảng Doctors (liên kết với Users)
+CREATE TABLE Doctors (
+    doctorID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    specialization VARCHAR(100) NOT NULL,
+    experience INT NOT NULL,
+    working_hours VARCHAR(255),
+    location TEXT,
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
+);
+
+-- Tạo bảng Appointments
+CREATE TABLE Appointments (
+    appointmentID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    doctorID INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    consultation_type ENUM('Online', 'In-Person') DEFAULT 'Online',
+    note TEXT,
+    status ENUM('Scheduled', 'Completed', 'Cancelled') DEFAULT 'Scheduled',
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID) ON DELETE CASCADE
+);
+
+-- Tạo bảng Products
+CREATE TABLE Products (
+    productID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tạo bảng Orders
+CREATE TABLE Orders (
+    orderID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    shipping_fee DECIMAL(10, 2) DEFAULT 0.00,
+    discount_code VARCHAR(50),
+    paymentStatus ENUM('Pending', 'Paid', 'Failed') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
+);
+
+-- Tạo bảng OrderDetails
+CREATE TABLE OrderDetails (
+    orderDetailID INT AUTO_INCREMENT PRIMARY KEY,
+    orderID INT NOT NULL,
+    productID INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+    FOREIGN KEY (productID) REFERENCES Products(productID) ON DELETE CASCADE
+);
+
+-- Tạo bảng Feedbacks (Đánh giá sản phẩm và dịch vụ)
+CREATE TABLE Feedbacks (
+    feedbackID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    doctorID INT,
+    productID INT,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID) ON DELETE SET NULL,
+    FOREIGN KEY (productID) REFERENCES Products(productID) ON DELETE SET NULL
+);
+
+-- Tạo bảng PaymentTransactions (Giao dịch thanh toán)
+CREATE TABLE PaymentTransactions (
+    transactionID INT AUTO_INCREMENT PRIMARY KEY,
+    orderID INT NOT NULL,
+    transaction_code VARCHAR(100) NOT NULL,
+    payment_method ENUM('CreditCard', 'E-Wallet', 'BankTransfer') NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    status ENUM('Success', 'Failed') DEFAULT 'Success',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE
+);
+
+-- Tạo bảng Notifications (Thông báo người dùng)
+CREATE TABLE Notifications (
+    notificationID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
+);
+
+INSERT INTO Users (name, email, password, phone, address, role) VALUES
+('Nguyen Van A', 'nguyenvana@example.com', '123123', '0987654321', '123 Main St, Hanoi', 'Patient'),
+('Tran Thi B', 'tranthib@example.com', '123123', '0981234567', '456 Nguyen Trai, Ho Chi Minh', 'Doctor'),
+('Le Van C', 'levanc@example.com', '123123', '0976543210', '789 Le Loi, Da Nang', 'Admin'),
+('Pham Thi D', 'phamthid@example.com', '123123', '0969876543', '321 Hai Ba Trung, Can Tho', 'Patient'),
+('Hoang Van E', 'hoangvane@example.com', '123123', '0953456789', '654 Tran Hung Dao, Hue', 'Doctor');
+
+INSERT INTO Doctors (userID, specialization, experience, working_hours, location) VALUES
+(2, 'Cardiologist', 10, '9:00 AM - 5:00 PM', 'Heart Center, Hanoi'),
+(5, 'Dermatologist', 8, '10:00 AM - 4:00 PM', 'Skin Clinic, Ho Chi Minh'),
+(3, 'Neurologist', 12, '8:00 AM - 3:00 PM', 'Neuro Center, Da Nang'),
+(4, 'Pediatrician', 7, '9:00 AM - 2:00 PM', 'Children Hospital, Can Tho'),
+(1, 'General Practitioner', 5, '10:00 AM - 6:00 PM', 'General Clinic, Hue');
+
+INSERT INTO Products (name, description, price, stock) VALUES
+('Vitamin C', 'Vitamin C hỗ trợ tăng cường hệ miễn dịch', 15.99, 100),
+('Thermometer', 'Nhiệt kế điện tử đo nhiệt độ cơ thể', 9.99, 50),
+('Blood Pressure Monitor', 'Máy đo huyết áp điện tử chính xác cao', 45.50, 30),
+('Pain Reliever', 'Thuốc giảm đau nhanh chóng, hiệu quả', 5.99, 200),
+('First Aid Kit', 'Bộ dụng cụ sơ cứu đầy đủ, tiện lợi', 25.00, 20);
+
+
+
