@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class ExerciseReminderScreen extends StatefulWidget {
   @override
-  State<ExerciseReminderScreen> createState() =>
-      _ExerciseReminderScreenState();
+  State<ExerciseReminderScreen> createState() => _ExerciseReminderScreenState();
 }
 
-class _ExerciseReminderScreenState
-    extends State<ExerciseReminderScreen> {
+class _ExerciseReminderScreenState extends State<ExerciseReminderScreen> {
   bool notifyBefore = false;
   bool repeatDaily = false;
 
@@ -23,9 +21,10 @@ class _ExerciseReminderScreenState
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); },
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(

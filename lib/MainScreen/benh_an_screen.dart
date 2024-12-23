@@ -10,9 +10,8 @@ class MedicalRecordsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
-            Icons.chevron_left,
+            Icons.arrow_back,
             color: Colors.black,
-            size: 30,
           ),
           onPressed: () {
             // Xử lý khi nhấn nút

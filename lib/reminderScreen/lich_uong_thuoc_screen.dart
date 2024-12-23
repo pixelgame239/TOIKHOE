@@ -22,7 +22,7 @@ class _LichUongThuocScreenState extends State<LichUongThuocScreen> {
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },

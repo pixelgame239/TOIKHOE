@@ -32,7 +32,7 @@ class ReminderScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
               context,
@@ -41,7 +41,6 @@ class ReminderScreen extends StatelessWidget {
           },
         ),
       ),
-
       backgroundColor: Colors.grey[200],
       body: Column(
         children: [
@@ -97,7 +96,8 @@ class ReminderScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddReminderScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => AddReminderScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -163,7 +163,8 @@ class _ReminderItemState extends State<ReminderItem> {
           backgroundColor: Colors.blueAccent.withOpacity(0.2),
           child: Icon(widget.icon, color: Colors.blue),
         ),
-        title: Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(widget.title,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
           'Thời gian đặt lịch: ${widget.time}\nLịch nhắc sẽ diễn ra: ${widget.next}',
           style: const TextStyle(fontSize: 12),
@@ -185,5 +186,3 @@ class _ReminderItemState extends State<ReminderItem> {
     );
   }
 }
-
-
