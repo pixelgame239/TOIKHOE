@@ -22,12 +22,14 @@ Future<List<Map<String, String>>> fetchTaiKhoanInfo() async {
 
   try {
     // Sử dụng prepared statement để bảo vệ dữ liệu
-    final result = await conn!.query("SELECT userID, password FROM Users");
+    final result =
+        await conn!.query("SELECT phone_number, password FROM Users");
 
     // Lưu trữ thông tin tài khoản vào danh sách
     for (var row in result) {
       accounts.add({
-        'userID': row[0]?.toString() ?? '', // Chuyển đổi giá trị về String
+        'phone_number':
+            row[0]?.toString() ?? '', // Chuyển đổi giá trị về String
         'password': row[1]?.toString() ?? '', // Chuyển đổi giá trị về String
       });
     }
