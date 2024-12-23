@@ -86,6 +86,8 @@ class _HomeElementState extends State<HomeElement> {
                     MaterialPageRoute(
                       builder: (context) => ChatScreen(),
                     ),
+
+
                   ),
                 ),
                 HomeMenuItem(

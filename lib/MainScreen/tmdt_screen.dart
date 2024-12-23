@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toikhoe/MainScreen/product_detail_screen.dart';
 import 'package:toikhoe/database/fetch_products.dart';
+import 'package:toikhoe/model/product_model.dart';
 
 class TMDTScreen extends StatefulWidget {
   const TMDTScreen({super.key});
@@ -27,7 +28,6 @@ class _TMDTScreenState extends State<TMDTScreen> {
     int crossAxisCount = screenWidth > 600
         ? 3
         : 2; // 3 columns for larger screens, 2 columns for smaller screens
-
     return FutureBuilder<List<Product>>(
       future: _productsFuture,
       builder: (context, snapshot) {
@@ -54,13 +54,13 @@ class _TMDTScreenState extends State<TMDTScreen> {
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
-            final product = products[index];
+            final curProduct = products[index];
             return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProductDetailScreen(product: product),
+                    builder: (context) => ProductDetailScreen(curProduct: curProduct),
                   ),
                 );
               },
@@ -88,7 +88,7 @@ class _TMDTScreenState extends State<TMDTScreen> {
 
                       // Product name
                       Text(
-                        product.name,
+                        curProduct.name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -98,10 +98,12 @@ class _TMDTScreenState extends State<TMDTScreen> {
 
                       // Product price
                       Text(
-                        '\$${product.price.toStringAsFixed(2)}',
+                        '\$${curProduct.price.toStringAsFixed(2)}',
                         style:
                             const TextStyle(fontSize: 14, color: Colors.green),
                       ),
+
+
                     ],
                   ),
                 ),
