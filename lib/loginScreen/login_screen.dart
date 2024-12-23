@@ -17,8 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String errorMessage = '';
   bool valid = true;
   bool isLoading = false;
-  Map<String, int> loginAttempts =
-      {}; // Theo dõi số lần đăng nhập sai theo tài khoản
 
   @override
   void initState() {
@@ -28,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<String> authenticateUser(String userName, String password) async {
     try {
+      // Thiết lập giới hạn thời gian chờ là 10 giây
       List<Map<String, String>> accounts = await fetchTaiKhoanInfo().timeout(
         const Duration(seconds: 10),
         onTimeout: () {
@@ -36,27 +35,24 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
 
+      // Tìm tài khoản theo userName
       for (var account in accounts) {
         if (account['userID'] == userName) {
           if (account['password'] == password) {
-            loginAttempts
-                .remove(userName); // Xóa số lần đăng nhập sai nếu thành công
-            return "success";
+            return "success"; // Đăng nhập thành công
           } else {
-            // Thêm logic giới hạn số lần đăng nhập sai
-            loginAttempts[userName] = (loginAttempts[userName] ?? 0) + 1;
-
-            if (loginAttempts[userName]! >= 5) {
-              return "account_locked"; // Khóa tài khoản sau 5 lần sai
-            }
-            return "wrong_password";
+            return "wrong_password"; // Sai mật khẩu
           }
         }
       }
-      return "user_not_found";
+      return "user_not_found"; // Tài khoản không tồn tại
     } catch (e) {
       print("Lỗi khi xác thực người dùng: $e");
-      return "error";
+      setState(() {
+        errorMessage = 'Không thể kết nối tới máy chủ. Vui lòng thử lại.';
+        valid = false;
+      });
+      return "error"; // Lỗi kết nối
     }
   }
 
