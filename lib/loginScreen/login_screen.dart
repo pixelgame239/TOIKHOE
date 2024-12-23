@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toikhoe/loginScreen/register_screen.dart'; // Import RegisterPage
+import 'package:toikhoe/loginScreen/register_screen.dart';
+import 'package:toikhoe/mainScreen/home_Screen.dart'; // Import RegisterPage
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print("Logging in User:");
       print("Phone: $phone");
       print("Password: $password");
-
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
       // TODO: Add API call to validate login credentials
     }
   }

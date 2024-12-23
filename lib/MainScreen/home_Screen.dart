@@ -5,6 +5,8 @@ import 'package:toikhoe/MainScreen/tmdt_screen.dart';
 import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
+import 'package:toikhoe/database/fetch_products.dart';
+import 'package:toikhoe/model/product_model.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -24,11 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  Widget? _screen(int currentIndex) {
+  Widget? _screen(int currentIndex){
     if (currentIndex == 0) {
       return const HomeElement();
     } else if (currentIndex == 4) {
-      print('index 4');
       return const TMDTScreen();
     } else {
       // You can add more conditions if needed for other screens

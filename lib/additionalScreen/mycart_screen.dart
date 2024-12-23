@@ -10,19 +10,21 @@ class MyCartScreen extends StatefulWidget {
 class MyCartScreenState extends State<MyCartScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: 20, 
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Item $index'),
-              );
-            },
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: 20, 
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text('Item $index'),
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

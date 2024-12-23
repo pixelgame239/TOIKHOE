@@ -21,30 +21,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.curProduct.name),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.curProduct.name),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Stack(
-              children:[
-                Positioned(left: 0, child: IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.arrow_back_ios))),
-                Positioned.fill(
-                  child: Container(
+           Container(
+             height: MediaQuery.of(context).size.height * 0.5, // Set the height for the image
+            child: Stack(
+            children: [
+              // Background Image
+              Positioned(
+                top: 0, 
+                left: 20,
+                right: 20,
+                bottom: 0,
+                child: Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height*0.5,
-                  child: Image(image: AssetImage('assets/ZaloLogin.jpg')),
-                                ),
+                  child: Image.asset(
+                    'assets/ZaloLogin.jpg',
+                    fit: BoxFit.contain,// Makes the image cover the container area
+                  ),
                 ),
-              ]
-            ),
+              ),
+              // Back Button in the top-left corner
+              Positioned(
+                left: 10, // Add some padding from the left edge
+                top: 20, // Add some padding from the top edge (to avoid overlap with status bar)
+                child: IconButton.filledTonal(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back, color: Colors.black,),// Optional: change the color of the icon
+                ),
+              ),
+            ],
+          ),
+           ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  onPressed: (){}, 
+                  onPressed: (){
+
+                  }, 
                   icon: Icon(Icons.add_shopping_cart)),
                 TextButton(onPressed: (){}, child: Text('Mua hàng'))
               ],
