@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import thư viện intl
-import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/database/fetch_tai_khoan.dart';
 import 'package:toikhoe/loginScreen/login_screen.dart';
 
@@ -74,7 +73,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: TextFormField(
-                      initialValue: account['hoTen'] ?? 'Không có tên',
+                      initialValue:
+                          account['name'] ?? 'Không có tên', // Hiển thị name
                       enabled: false,
                       decoration:
                           const InputDecoration(icon: Icon(Icons.person_pin)),
@@ -83,8 +83,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: TextFormField(
-                      initialValue:
-                          account['soDienThoai'] ?? 'Không có số điện thoại',
+                      initialValue: account['email'] ??
+                          'Không có email', // Hiển thị email
+                      enabled: false,
+                      decoration:
+                          const InputDecoration(icon: Icon(Icons.email)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: TextFormField(
+                      initialValue: account['phone'] ??
+                          'Không có số điện thoại', // Hiển thị phone
                       enabled: false,
                       decoration: const InputDecoration(
                           icon: Icon(Icons.phone_android)),
@@ -93,11 +103,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: TextFormField(
-                      initialValue: formatDate(
-                          account['ngaySinh']), // Định dạng ngày sinh
+                      initialValue: account['address'] ??
+                          'Không có địa chỉ', // Hiển thị address
+                      enabled: false,
+                      decoration:
+                          const InputDecoration(icon: Icon(Icons.location_on)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: TextFormField(
+                      initialValue: account['role'] ??
+                          'Không có vai trò', // Hiển thị role
                       enabled: false,
                       decoration: const InputDecoration(
-                          icon: Icon(Icons.calendar_today)),
+                          icon: Icon(Icons.account_circle)),
                     ),
                   ),
                   const SizedBox(height: 20),

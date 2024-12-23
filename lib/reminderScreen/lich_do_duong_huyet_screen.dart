@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class LichDoDuongHuyetScreen extends StatefulWidget {
   @override
-  State<LichDoDuongHuyetScreen> createState() =>
-      _LichDoDuongHuyetScreenState();
+  State<LichDoDuongHuyetScreen> createState() => _LichDoDuongHuyetScreenState();
 }
 
-class _LichDoDuongHuyetScreenState
-    extends State<LichDoDuongHuyetScreen> {
+class _LichDoDuongHuyetScreenState extends State<LichDoDuongHuyetScreen> {
   bool notifyBefore = false;
   bool repeatDaily = false;
 
@@ -23,9 +21,10 @@ class _LichDoDuongHuyetScreenState
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); },
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -63,9 +62,9 @@ class _LichDoDuongHuyetScreenState
                     ),
                     items: ['1 lần/ngày', '2 lần/ngày', '3 lần/ngày']
                         .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    ))
+                              value: value,
+                              child: Text(value),
+                            ))
                         .toList(),
                     onChanged: (value) {
                       // Xử lý khi chọn số lần đo
