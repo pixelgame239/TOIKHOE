@@ -22,7 +22,7 @@ class _LichKhamScreenState extends State<LichKhamScreen> {
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Trở về giao diện trước
           },
@@ -84,7 +84,8 @@ class _LichKhamScreenState extends State<LichKhamScreen> {
                     children: [
                       const Text(
                         'Báo trước',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       Switch(
                         value: notifyBefore,
