@@ -1,92 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:toikhoe/database/insert_data.dart';
-import 'package:toikhoe/loginScreen/otp_screen.dart';
+import 'RdsService.dart';
+import 'login_screen.dart'; // Import RdsService class
 
-class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController confirmController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-
+class RegisterPage extends StatefulWidget {
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  bool _isLoading = false;
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
 
-  bool isPasswordValid(String password) {
-    // Biểu thức chính quy kiểm tra điều kiện mật khẩu
-    final regex = RegExp(r'^(?=.*[!@#\$%\^&\*])(?=.*[0-9]).{7,}$');
-    return regex.hasMatch(password);
-  }
+  // Khởi tạo đối tượng RdsService
+  final RdsService _rdsService = RdsService();
 
-  void registerUser() async {
-    String name = widget.nameController.text.trim();
-    String email = widget.emailController.text.trim();
-    String phone = widget.phoneController.text.trim();
-    String pass = widget.passController.text.trim();
-    String confirmPass = widget.confirmController.text.trim();
-    String address = widget.addressController.text.trim();
-    String role = 'Patient'; // Default role
+  // Các giá trị mặc định
+  String _selectedProvince = 'Hà Nội'; // Giá trị mặc định cho tỉnh thành
+  String _selectedRole = 'Patient'; // Giá trị mặc định cho vai trò
 
-// Kiểm tra điều kiện mật khẩu
-    if (!isPasswordValid(pass)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-              "Mật khẩu phải có ít nhất 7 ký tự, bao gồm ký tự đặc biệt và chữ số"),
-          duration:
-              const Duration(seconds: 5), // Hiển thị SnackBar trong 5 giây
-        ),
-      );
-      return;
-    }
+  // Danh sách tỉnh thành Việt Nam
+  final List<String> provinces = [
+    'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'An Giang',
+    'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu', 'Bắc Ninh', 'Bến Tre',
+    'Bình Dương', 'Bình Định', 'Bình Phước', 'Bình Thuận', 'Cà Mau', 'Cao Bằng',
+    'Cần Thơ', 'Đắk Lắk', 'Đắk Nông', 'Điện Biên', 'Đồng Nai', 'Đồng Tháp',
+    'Gia Lai', 'Hà Giang', 'Hà Nam', 'Hà Tĩnh', 'Hậu Giang', 'Hòa Bình',
+    'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu', 'Lâm Đồng',
+    'Long An', 'Nam Định', 'Nghệ An', 'Ninh Bình', 'Ninh Thuận', 'Phú Thọ',
+    'Phú Yên', 'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị',
+    'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+    'Thừa Thiên Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+    'Vĩnh Phúc', 'Yên Bái'
+  ];
 
-    // Kiểm tra mật khẩu và xác nhận mật khẩu
-    if (pass != confirmPass) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Mật khẩu không khớp")),
-      );
-      return;
-    }
+  Future<void> _registerUser() async {
+    if (_formKey.currentState!.validate()) {
+      final name = _nameController.text.trim();
+      final email = _emailController.text.trim();
+      final phone = _phoneController.text.trim();
+      final address = _addressController.text.trim();
+      final province = _selectedProvince;  // Lấy giá trị tỉnh thành
+      final role = _selectedRole;  // Lấy giá trị vai trò
 
-    setState(() {
-      _isLoading = true;
-    });
+      try {
+        // Gọi phương thức registerUser từ RdsService để lưu vào RDS
+        await _rdsService.registerUser(name, email, phone, address, province, role);
 
-    try {
-      // Gọi hàm insertUser để thêm tài khoản vào cơ sở dữ liệu
-      bool isInserted = await insertUser(
-        name,
-        email,
-        pass,
-        phone,
-        address,
-        role,
-      );
+        // Sau khi đăng ký thành công, chuyển hướng về trang Login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()), // Quay lại trang login
+        );
 
-      if (isInserted) {
-        // Chuyển đến màn hình OTP sau khi đăng ký thành công
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => OtpScreen()));
-      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Đăng ký thất bại")),
+          SnackBar(content: Text('Registration successful!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to register user: $e')),
         );
       }
-    } catch (e) {
-      print("Lỗi đăng ký: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Đã có lỗi xảy ra, vui lòng thử lại")),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -94,52 +70,103 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đăng ký tài khoản'),
+        title: Text('Register'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: widget.nameController,
-                decoration: const InputDecoration(label: Text('Họ và tên')),
-              ),
-              TextFormField(
-                controller: widget.emailController,
-                decoration: const InputDecoration(label: Text('Email')),
-              ),
-              TextFormField(
-                controller: widget.phoneController,
-                decoration: const InputDecoration(label: Text('Số điện thoại')),
-              ),
-              TextFormField(
-                controller: widget.passController,
-                decoration: const InputDecoration(label: Text('Mật khẩu')),
-                obscureText: true,
-              ),
-              TextFormField(
-                controller: widget.confirmController,
-                decoration:
-                    const InputDecoration(label: Text('Xác nhận mật khẩu')),
-                obscureText: true,
-              ),
-              TextFormField(
-                controller: widget.addressController,
-                decoration: const InputDecoration(label: Text('Địa chỉ')),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  onPressed: _isLoading
-                      ? null
-                      : registerUser, // Disable button when loading
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Đăng ký'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(labelText: 'Full Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-            ],
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(labelText: 'Email'),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(labelText: 'Phone Number'),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Please enter a valid phone number';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(labelText: 'Address'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your address';
+                    }
+                    return null;
+                  },
+                ),
+                // Dropdown cho tỉnh thành
+                DropdownButtonFormField<String>(
+                  value: _selectedProvince,
+                  items: provinces.map((province) {
+                    return DropdownMenuItem<String>(
+                      value: province,
+                      child: Text(province),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedProvince = value!;
+                    });
+                  },
+                  decoration: InputDecoration(labelText: 'Select Province'),
+                ),
+                // Dropdown cho vai trò
+                DropdownButtonFormField<String>(
+                  value: _selectedRole,
+                  items: ['Patient', 'Doctor'].map((role) {
+                    return DropdownMenuItem<String>(
+                      value: role,
+                      child: Text(role),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedRole = value!;
+                    });
+                  },
+                  decoration: InputDecoration(labelText: 'Select Role'),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _registerUser,
+                  child: Text('Register'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

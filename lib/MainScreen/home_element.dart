@@ -43,7 +43,7 @@ class _HomeElementState extends State<HomeElement> {
               ),
               HomeMenuItem(
                 'Bệnh án',
-                Icons.favorite,
+                Icons.book,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -53,16 +53,16 @@ class _HomeElementState extends State<HomeElement> {
                   );
                 },
               ),
-              HomeMenuItem('Bác sĩ của tôi', Icons.person,
+              HomeMenuItem('Bác sĩ của tôi', Icons.person_3,
                   onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyDoctorScreen(),
-                        ),
-                      )),
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyDoctorScreen(),
+                    ),
+                  )),
               HomeMenuItem(
-                'Lịch nhắc',
-                Icons.calendar_today,
+                'Bác sĩ yêu thích',
+                Icons.favorite,
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
