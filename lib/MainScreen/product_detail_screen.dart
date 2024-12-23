@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/database/fetch_products.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+  const ProductDetailScreen({super.key, required Product product});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
