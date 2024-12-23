@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
+import 'package:toikhoe/MainScreen/tmdt_screen.dart';
+import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
 
@@ -20,8 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
   Widget? _screen(int currentIndex){
-    if(currentIndex==2){
+    if(currentIndex==0){
       return const HomeElement();      
+    }
+    else if (currentIndex == 4){
+      print('index 4');
+      return const TMDTScreen();
     }
     else{
 
@@ -61,6 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
         actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCartScreen()));
+          }, icon: Icon(Icons.shopping_cart, color: Colors.white,)),
           IconButton(
               icon: const Icon(Icons.notifications, color: Colors.white),
               onPressed: () {
@@ -82,11 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           },
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Bác sĩ'),
-            BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_3), label: 'Bác sĩ'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_badge_plus), label: 'Đặt lịch khám'),
             BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Tin nhắn'),
-            BottomNavigationBarItem(icon: Icon(Icons.apps), label: 'Tiện ích'),
+            BottomNavigationBarItem(icon: Icon(Icons.shopify), label: 'Sàn TMĐT'),
           ],
         ),
       ),
