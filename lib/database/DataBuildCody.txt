@@ -5,7 +5,7 @@ CREATE TABLE Users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(15),
-    address TEXT,
+    address VARCHAR(100),
     role ENUM('Patient', 'Doctor', 'Admin') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -17,7 +17,7 @@ CREATE TABLE Doctors (
     specialization VARCHAR(100) NOT NULL,
     experience INT NOT NULL,
     working_hours VARCHAR(255),
-    location TEXT,
+    location VARCHAR(100),
     FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE Appointments (
     date DATE NOT NULL,
     time TIME NOT NULL,
     consultation_type ENUM('Online', 'In-Person') DEFAULT 'Online',
-    note TEXT,
+    note VARCHAR(100),
     status ENUM('Scheduled', 'Completed', 'Cancelled') DEFAULT 'Scheduled',
     FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
     FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID) ON DELETE CASCADE
@@ -39,7 +39,7 @@ CREATE TABLE Appointments (
 CREATE TABLE Products (
     productID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT,
+    description VARCHAR(100),
     price DECIMAL(10, 2) NOT NULL,
     stock INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -75,7 +75,7 @@ CREATE TABLE Feedbacks (
     doctorID INT,
     productID INT,
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
-    comment TEXT,
+    comment VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
     FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID) ON DELETE SET NULL,
@@ -98,32 +98,31 @@ CREATE TABLE PaymentTransactions (
 CREATE TABLE Notifications (
     notificationID INT AUTO_INCREMENT PRIMARY KEY,
     userID INT NOT NULL,
-    message TEXT NOT NULL,
+    message VARCHAR(100) NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
 );
 
-INSERT INTO Users (name, email, password, phone, address, role) VALUES
-('Nguyen Van A', 'nguyenvana@example.com', '123123', '0987654321', '123 Main St, Hanoi', 'Patient'),
-('Tran Thi B', 'tranthib@example.com', '123123', '0981234567', '456 Nguyen Trai, Ho Chi Minh', 'Doctor'),
-('Le Van C', 'levanc@example.com', '123123', '0976543210', '789 Le Loi, Da Nang', 'Admin'),
-('Pham Thi D', 'phamthid@example.com', '123123', '0969876543', '321 Hai Ba Trung, Can Tho', 'Patient'),
-('Hoang Van E', 'hoangvane@example.com', '123123', '0953456789', '654 Tran Hung Dao, Hue', 'Doctor');
+INSERT INTO Users (id, username, email, password, created_at) VALUES
+(1, 'john_doe', 'john.doe@example.com', 'password123', NOW()),
+(2, 'jane_smith', 'jane.smith@example.com', 'password123', NOW()),
+(3, 'michael_lee', 'michael.lee@example.com', 'password123', NOW()),
+(4, 'susan_wong', 'susan.wong@example.com', 'password123', NOW()),
+(5, 'alex_jones', 'alex.jones@example.com', 'password123', NOW());
 
-INSERT INTO Doctors (userID, specialization, experience, working_hours, location) VALUES
-(2, 'Cardiologist', 10, '9:00 AM - 5:00 PM', 'Heart Center, Hanoi'),
-(5, 'Dermatologist', 8, '10:00 AM - 4:00 PM', 'Skin Clinic, Ho Chi Minh'),
-(3, 'Neurologist', 12, '8:00 AM - 3:00 PM', 'Neuro Center, Da Nang'),
-(4, 'Pediatrician', 7, '9:00 AM - 2:00 PM', 'Children Hospital, Can Tho'),
-(1, 'General Practitioner', 5, '10:00 AM - 6:00 PM', 'General Clinic, Hue');
+INSERT INTO Doctors (id, name, specialty, phone, email, created_at) VALUES
+(1, 'Dr. Emily Carter', 'Cardiologist', '123-456-7890', 'emily.carter@example.com', NOW()),
+(2, 'Dr. Daniel Smith', 'Dentist', '123-456-7891', 'daniel.smith@example.com', NOW()),
+(3, 'Dr. Sophia Johnson', 'Pediatrician', '123-456-7892', 'sophia.johnson@example.com', NOW()),
+(4, 'Dr. Liam Brown', 'Orthopedic', '123-456-7893', 'liam.brown@example.com', NOW()),
+(5, 'Dr. Olivia Martinez', 'Dermatologist', '123-456-7894', 'olivia.martinez@example.com', NOW());
 
-INSERT INTO Products (name, description, price, stock) VALUES
-('Vitamin C', 'Vitamin C hỗ trợ tăng cường hệ miễn dịch', 15.99, 100),
-('Thermometer', 'Nhiệt kế điện tử đo nhiệt độ cơ thể', 9.99, 50),
-('Blood Pressure Monitor', 'Máy đo huyết áp điện tử chính xác cao', 45.50, 30),
-('Pain Reliever', 'Thuốc giảm đau nhanh chóng, hiệu quả', 5.99, 200),
-('First Aid Kit', 'Bộ dụng cụ sơ cứu đầy đủ, tiện lợi', 25.00, 20);
-
+INSERT INTO Products (id, name, category, price, stock, created_at) VALUES
+(1, 'Blood Pressure Monitor', 'Medical Equipment', 49.99, 100, NOW()),
+(2, 'Stethoscope', 'Medical Equipment', 29.99, 200, NOW()),
+(3, 'Vitamin D Tablets', 'Supplements', 19.99, 300, NOW()),
+(4, 'Face Mask (Pack of 50)', 'Safety Equipment', 9.99, 500, NOW()),
+(5, 'Digital Thermometer', 'Medical Equipment', 14.99, 150, NOW());
 
 

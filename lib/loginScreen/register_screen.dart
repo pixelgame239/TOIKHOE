@@ -10,6 +10,9 @@ class RegisterScreen extends StatefulWidget {
   TextEditingController passController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController provinceController = TextEditingController();
+  String status = 'active'; // Mặc định là active
+  String role = 'Patient'; // Mặc định là Patient
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -19,7 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
 
   bool isPasswordValid(String password) {
-    // Biểu thức chính quy kiểm tra điều kiện mật khẩu
     final regex = RegExp(r'^(?=.*[!@#\$%\^&\*])(?=.*[0-9]).{7,}$');
     return regex.hasMatch(password);
   }
@@ -31,22 +33,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String pass = widget.passController.text.trim();
     String confirmPass = widget.confirmController.text.trim();
     String address = widget.addressController.text.trim();
-    String role = 'Patient'; // Default role
+    String province = widget.provinceController.text.trim();
+    String status = widget.status;
+    String role = widget.role;
 
-// Kiểm tra điều kiện mật khẩu
     if (!isPasswordValid(pass)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
+        const SnackBar(
+          content: Text(
               "Mật khẩu phải có ít nhất 7 ký tự, bao gồm ký tự đặc biệt và chữ số"),
-          duration:
-              const Duration(seconds: 5), // Hiển thị SnackBar trong 5 giây
+          duration: Duration(seconds: 5),
         ),
       );
       return;
     }
 
-    // Kiểm tra mật khẩu và xác nhận mật khẩu
     if (pass != confirmPass) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Mật khẩu không khớp")),
@@ -59,18 +60,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // Gọi hàm insertUser để thêm tài khoản vào cơ sở dữ liệu
       bool isInserted = await insertUser(
         name,
         email,
         pass,
         phone,
         address,
+        status,
         role,
+        province,
       );
 
       if (isInserted) {
-        // Chuyển đến màn hình OTP sau khi đăng ký thành công
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => OtpScreen()));
       } else {
@@ -128,12 +129,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: widget.addressController,
                 decoration: const InputDecoration(label: Text('Địa chỉ')),
               ),
+              TextFormField(
+                controller: widget.provinceController,
+                decoration:
+                    const InputDecoration(label: Text('Tỉnh/Thành phố')),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
-                  onPressed: _isLoading
-                      ? null
-                      : registerUser, // Disable button when loading
+                  onPressed: _isLoading ? null : registerUser,
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Text('Đăng ký'),

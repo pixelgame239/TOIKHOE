@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import thư viện intl
 import 'package:toikhoe/database/fetch_tai_khoan.dart';
+import 'package:toikhoe/database/fetch_userID_password.dart';
 import 'package:toikhoe/loginScreen/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -63,87 +64,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
               var account =
                   snapshot.data![0]; // Lấy thông tin tài khoản đầu tiên
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
-                    radius: 50,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: TextFormField(
-                      initialValue:
-                          account['name'] ?? 'Không có tên', // Hiển thị name
-                      enabled: false,
-                      decoration:
-                          const InputDecoration(icon: Icon(Icons.person_pin)),
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
+                      radius: 50,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: TextFormField(
-                      initialValue: account['email'] ??
-                          'Không có email', // Hiển thị email
-                      enabled: false,
-                      decoration:
-                          const InputDecoration(icon: Icon(Icons.email)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: TextFormField(
-                      initialValue: account['phone'] ??
-                          'Không có số điện thoại', // Hiển thị phone
-                      enabled: false,
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.phone_android)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: TextFormField(
-                      initialValue: account['address'] ??
-                          'Không có địa chỉ', // Hiển thị address
-                      enabled: false,
-                      decoration:
-                          const InputDecoration(icon: Icon(Icons.location_on)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: TextFormField(
-                      initialValue: account['role'] ??
-                          'Không có vai trò', // Hiển thị role
-                      enabled: false,
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.account_circle)),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Colors.red,
-                          ),
-                          Text('Đăng xuất'),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        initialValue:
+                            account['name'] ?? 'Không có tên', // Hiển thị name
+                        enabled: false,
+                        decoration:
+                            const InputDecoration(icon: Icon(Icons.person_pin)),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        initialValue: account['email'] ??
+                            'Không có email', // Hiển thị email
+                        enabled: false,
+                        decoration:
+                            const InputDecoration(icon: Icon(Icons.email)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        initialValue: account['phone'] ??
+                            'Không có số điện thoại', // Hiển thị phone
+                        enabled: false,
+                        decoration: const InputDecoration(
+                            icon: Icon(Icons.phone_android)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        initialValue: account['address'] ??
+                            'Không có địa chỉ', // Hiển thị address
+                        enabled: false,
+                        decoration: const InputDecoration(
+                            icon: Icon(Icons.location_on)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: TextFormField(
+                        initialValue: account['role'] ??
+                            'Không có vai trò', // Hiển thị role
+                        enabled: false,
+                        decoration: const InputDecoration(
+                            icon: Icon(Icons.account_circle)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              color: Colors.red,
+                            ),
+                            Text('Đăng xuất'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
           },
