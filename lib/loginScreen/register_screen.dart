@@ -13,6 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
+  final _passController = TextEditingController();
 
   // Khởi tạo đối tượng RdsService
   final RdsService _rdsService = RdsService();
@@ -42,12 +43,13 @@ class _RegisterPageState extends State<RegisterPage> {
       final email = _emailController.text.trim();
       final phone = _phoneController.text.trim();
       final address = _addressController.text.trim();
+      final password = _passController.text;
       final province = _selectedProvince;  // Lấy giá trị tỉnh thành
       final role = _selectedRole;  // Lấy giá trị vai trò
 
       try {
         // Gọi phương thức registerUser từ RdsService để lưu vào RDS
-        await _rdsService.registerUser(name, email, phone, address, province, role);
+        await _rdsService.registerUser(name, email, phone, address, province, role, password);
 
         // Sau khi đăng ký thành công, chuyển hướng về trang Login
         Navigator.pushReplacement(
@@ -56,11 +58,11 @@ class _RegisterPageState extends State<RegisterPage> {
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration successful!')),
+          SnackBar(content: Text('Đăng ký thành công')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register user: $e')),
+          SnackBar(content: Text('Lỗi đăng ký tài khoản: $e')),
         );
       }
     }
@@ -70,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Đăng ký'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -82,10 +84,10 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Full Name'),
+                  decoration: InputDecoration(labelText: 'Họ và tên'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
+                      return 'Vui lòng nhập họ và tên';
                     }
                     return null;
                   },
@@ -96,34 +98,44 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng nhập mật khẩu của bạn';
                     }
                     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email address';
+                      return 'Email không hợp lệ';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: _phoneController,
-                  decoration: InputDecoration(labelText: 'Phone Number'),
+                  decoration: InputDecoration(labelText: 'Số điện thoại'),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Vui lòng nhập số điện thoại';
                     }
                     if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Please enter a valid phone number';
+                      return 'Số điện thoại không hợp lệ';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _passController,
+                   decoration: InputDecoration(labelText: 'Mật khẩu'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length <=6) {
+                      return 'Mật khẩu không hợp lệ';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: _addressController,
-                  decoration: InputDecoration(labelText: 'Address'),
+                  decoration: InputDecoration(labelText: 'Địa chỉ'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your address';
+                      return 'Vui lòng nhập địa chỉ của bạn';
                     }
                     return null;
                   },
@@ -142,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       _selectedProvince = value!;
                     });
                   },
-                  decoration: InputDecoration(labelText: 'Select Province'),
+                  decoration: InputDecoration(labelText: 'Chọn tỉnh thành'),
                 ),
                 // Dropdown cho vai trò
                 DropdownButtonFormField<String>(
@@ -158,12 +170,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       _selectedRole = value!;
                     });
                   },
-                  decoration: InputDecoration(labelText: 'Select Role'),
+                  decoration: InputDecoration(labelText: 'Đăng ký với tư cách'),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _registerUser,
-                  child: Text('Register'),
+                  child: Text('Đăng ký'),
                 ),
               ],
             ),
