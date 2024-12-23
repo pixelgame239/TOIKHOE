@@ -1,3 +1,4 @@
+import 'package:bcrypt/bcrypt.dart';
 import 'package:mysql1/mysql1.dart';
 
 class RdsService {
@@ -22,14 +23,17 @@ class RdsService {
   }
 
   Future<void> registerUser(
-      String name, String email, String phone, String address, String province, String role) async {
+      String name, String email, String phone, String address, String province, String role, String password) async {
     final conn = await connectToRDS(); // Kết nối tới RDS
     if (conn != null) {
       try {
-        // Thực hiện câu lệnh INSERT vào bảng Users
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        // Thực hiện câu lệnh INSERT vào bảng Users (bao gồm mật khẩu đã mã hóa)
         await conn.query(
-          'INSERT INTO Users (name, email, phone_number, address, status, role, province) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [name, email, phone, address, 'active', role, province],
+          'INSERT INTO Users (name, email, phone_number, address, status, role, province, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          [name, email, phone, address, 'active', role, province, hashedPassword], // Lưu mật khẩu đã mã hóa
         );
         print('Dữ liệu đã được lưu vào cơ sở dữ liệu!');
       } catch (e) {

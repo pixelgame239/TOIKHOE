@@ -1,6 +1,8 @@
+import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/material.dart';
-import 'RdsService.dart';
-import 'login_screen.dart'; // Import RdsService class
+import '../database/connection.dart';
+import 'RdsService.dart'; // Import RdsService class
+import 'login_screen.dart'; // Import LoginPage
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -13,26 +15,23 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
+  final _passwordController = TextEditingController();  // Controller for password field
 
-  // Khởi tạo đối tượng RdsService
-  final RdsService _rdsService = RdsService();
+  final RdsService _rdsService = RdsService(); // Khởi tạo đối tượng RdsService
 
-  // Các giá trị mặc định
   String _selectedProvince = 'Hà Nội'; // Giá trị mặc định cho tỉnh thành
   String _selectedRole = 'Patient'; // Giá trị mặc định cho vai trò
 
-  // Danh sách tỉnh thành Việt Nam
   final List<String> provinces = [
     'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'An Giang',
     'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu', 'Bắc Ninh', 'Bến Tre',
     'Bình Dương', 'Bình Định', 'Bình Phước', 'Bình Thuận', 'Cà Mau', 'Cao Bằng',
-    'Cần Thơ', 'Đắk Lắk', 'Đắk Nông', 'Điện Biên', 'Đồng Nai', 'Đồng Tháp',
-    'Gia Lai', 'Hà Giang', 'Hà Nam', 'Hà Tĩnh', 'Hậu Giang', 'Hòa Bình',
-    'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu', 'Lâm Đồng',
-    'Long An', 'Nam Định', 'Nghệ An', 'Ninh Bình', 'Ninh Thuận', 'Phú Thọ',
-    'Phú Yên', 'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị',
-    'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
-    'Thừa Thiên Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+    'Đắk Lắk', 'Đắk Nông', 'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+    'Hà Nam', 'Hà Tĩnh', 'Hậu Giang', 'Hòa Bình', 'Hưng Yên', 'Khánh Hòa', 'Kiên Giang',
+    'Kon Tum', 'Lai Châu', 'Lâm Đồng', 'Long An', 'Nam Định', 'Nghệ An', 'Ninh Bình',
+    'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi',
+    'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên',
+    'Thanh Hóa', 'Thừa Thiên Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
     'Vĩnh Phúc', 'Yên Bái'
   ];
 
@@ -42,12 +41,13 @@ class _RegisterPageState extends State<RegisterPage> {
       final email = _emailController.text.trim();
       final phone = _phoneController.text.trim();
       final address = _addressController.text.trim();
-      final province = _selectedProvince;  // Lấy giá trị tỉnh thành
-      final role = _selectedRole;  // Lấy giá trị vai trò
+      final password = _passwordController.text.trim();  // Lấy mật khẩu người dùng nhập
+      final province = _selectedProvince;
+      final role = _selectedRole;
 
       try {
         // Gọi phương thức registerUser từ RdsService để lưu vào RDS
-        await _rdsService.registerUser(name, email, phone, address, province, role);
+        await _rdsService.registerUser(name, email, phone, address, province, role, password);
 
         // Sau khi đăng ký thành công, chuyển hướng về trang Login
         Navigator.pushReplacement(
@@ -65,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +125,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your address';
+                    }
+                    return null;
+                  },
+                ),
+                // Trường mật khẩu
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
                     }
                     return null;
                   },
