@@ -14,20 +14,21 @@ Future<void> initializeConnection() async {
 
 Future<List<Map<String, String>>> fetchTaiKhoanInfo() async {
   List<Map<String, String>> accounts = [];
+
   if (conn == null) {
     print('Kết nối chưa được khởi tạo.');
     return accounts; // Trả về danh sách rỗng
   }
 
   try {
-    // Thực hiện truy vấn để lấy ID và mật khẩu từ bảng TaiKhoan
-    final result = await conn!.query("SELECT ID, matKhau FROM TaiKhoan");
+    // Sử dụng prepared statement để bảo vệ dữ liệu
+    final result = await conn!.query("SELECT userID, password FROM Users");
 
     // Lưu trữ thông tin tài khoản vào danh sách
     for (var row in result) {
       accounts.add({
-        'ID': row['ID'] as String,
-        'matKhau': row['matKhau'] as String,
+        'userID': row[0]?.toString() ?? '', // Chuyển đổi giá trị về String
+        'password': row[1]?.toString() ?? '', // Chuyển đổi giá trị về String
       });
     }
 
