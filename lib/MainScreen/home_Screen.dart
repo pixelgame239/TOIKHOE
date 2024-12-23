@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
+import 'package:toikhoe/MainScreen/tmdt_screen.dart';
+import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
 
