@@ -1,75 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:toikhoe/MainScreen/home_screen.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class VerifyScreen extends StatefulWidget {
+  final String email; // Email được truyền từ màn hình đăng ký
+
+  VerifyScreen({required this.email});
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  _VerifyScreenState createState() => _VerifyScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
-    final List<TextEditingController> _otpControllers =
-      List.generate(6, (index) => TextEditingController());
-    String getOTPString() {
-    return _otpControllers.map((controller) => controller.text).join();
+class _VerifyScreenState extends State<VerifyScreen> {
+  final _otpController = TextEditingController();
+
+  @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
   }
+
+  Future<void> _verifyOtp() async {
+    final otp = _otpController.text.trim();
+    // TODO: Xác thực mã OTP từ backend hoặc bộ nhớ cục bộ
+    if (otp == "123456") { // Giả lập mã OTP hợp lệ
+      print("OTP verified for email: ${widget.email}");
+      // TODO: Lưu dữ liệu người dùng vào database sau khi xác thực thành công
+      _saveUserToDatabase();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid OTP. Please try again.')),
+      );
+    }
+  }
+
+  Future<void> _saveUserToDatabase() async {
+    // TODO: Gửi dữ liệu người dùng đã xác thực đến backend
+    print("User data saved to database!");
+    Navigator.pop(context); // Quay lại màn hình chính
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter your OTP'),
+        title: Text('Verify Email OTP'),
       ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(6, (index) {
-              return SizedBox(
-                width: 35,
-                height: 50,
-                child: TextField(
-                  controller: _otpControllers[index],
-                  keyboardType: TextInputType.number,
-                  maxLength: 1,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    counterText: '',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.blue),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  onChanged: (value) {
-                    if (value.length == 1 && RegExp(r'^[0-9]$').hasMatch(value)) {
-                      if (index < 5) {
-                        FocusScope.of(context).nextFocus();
-                      }
-                    } else if (value.isEmpty && index > 0) {
-                      FocusScope.of(context).previousFocus();
-                    }
-                  },
-                ),
-              );
-            }),
-          ),
-          TextButton(
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-            }, 
-            child: Text('Xác nhận'))
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Enter the OTP sent to ${widget.email}:'),
+            TextFormField(
+              controller: _otpController,
+              decoration: InputDecoration(labelText: 'OTP'),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the OTP';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _verifyOtp,
+              child: Text('Verify'),
+            ),
+          ],
+        ),
       ),
     );
   }

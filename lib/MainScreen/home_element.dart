@@ -55,11 +55,11 @@ class _HomeElementState extends State<HomeElement> {
               ),
               HomeMenuItem('Bác sĩ của tôi', Icons.person_3,
                   onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyDoctorScreen(),
-                        ),
-                      )),
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyDoctorScreen(),
+                    ),
+                  )),
               HomeMenuItem(
                 'Bác sĩ yêu thích',
                 Icons.favorite,
