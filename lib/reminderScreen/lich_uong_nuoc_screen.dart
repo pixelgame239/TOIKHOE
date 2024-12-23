@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class LichUongNuocScreen extends StatefulWidget {
   @override
-  State<LichUongNuocScreen> createState() =>
-      _LichUongNuocScreenState();
+  State<LichUongNuocScreen> createState() => _LichUongNuocScreenState();
 }
 
 class _LichUongNuocScreenState extends State<LichUongNuocScreen> {
@@ -22,9 +21,10 @@ class _LichUongNuocScreenState extends State<LichUongNuocScreen> {
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); },
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -62,9 +62,9 @@ class _LichUongNuocScreenState extends State<LichUongNuocScreen> {
                     ),
                     items: ['1.5L', '2L', '2.5L']
                         .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    ))
+                              value: value,
+                              child: Text(value),
+                            ))
                         .toList(),
                     onChanged: (value) {
                       // Xử lý khi chọn lượng nước

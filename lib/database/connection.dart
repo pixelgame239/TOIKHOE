@@ -10,7 +10,7 @@ Future<MySqlConnection?> connectToRDS() async {
     port: 3306, // Cổng mặc định của MySQL
     user: 'admin', // Tên người dùng
     password: 'mypassword', // Mật khẩu
-    db: 'test', // Tên cơ sở dữ liệu
+    db: 'testCody', // Tên cơ sở dữ liệu
   );
 
   try {

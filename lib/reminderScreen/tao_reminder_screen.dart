@@ -20,9 +20,10 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
         elevation: 1,
         centerTitle: true,
         leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-          Navigator.pop(context); },
+            Navigator.pop(context);
+          },
         ),
         title: const Text(
           'Tạo lịch nhắc',
@@ -53,7 +54,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LichKhamScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LichKhamScreen()),
                         );
                       },
                     ),
@@ -64,7 +66,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LichUongThuocScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LichUongThuocScreen()),
                         );
                       },
                     ),
@@ -75,7 +78,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LichDoHuyetApScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LichDoHuyetApScreen()),
                         );
                       },
                     ),
@@ -86,7 +90,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ExerciseReminderScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => ExerciseReminderScreen()),
                         );
                       },
                     ),
@@ -97,11 +102,11 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LichDoDuongHuyetScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LichDoDuongHuyetScreen()),
                         );
                       },
                     ),
-
                     SectionTitle(title: "Dinh dưỡng"),
                     ReminderItem(
                       icon: Icons.water_drop,
@@ -110,7 +115,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LichUongNuocScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LichUongNuocScreen()),
                         );
                       },
                     ),
@@ -120,7 +126,6 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                       text: "Đặt lịch ăn uống",
                       onTap: () => _navigateTo(context, "Đặt lịch ăn uống"),
                     ),
-
                     SectionTitle(title: "Cơ thể"),
                     ReminderItem(
                       icon: Icons.calendar_month,

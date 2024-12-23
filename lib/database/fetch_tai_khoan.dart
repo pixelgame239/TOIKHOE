@@ -9,7 +9,7 @@ Future<List<Map<String, dynamic>>> fetchAllTaiKhoan() async {
 
   try {
     // Thực hiện truy vấn để lấy toàn bộ dữ liệu từ bảng TaiKhoan
-    final result = await conn!.query("SELECT * FROM TaiKhoan");
+    final result = await conn!.query("SELECT * FROM Users");
 
     // Lưu trữ dữ liệu từng bản ghi vào danh sách
     for (var row in result) {

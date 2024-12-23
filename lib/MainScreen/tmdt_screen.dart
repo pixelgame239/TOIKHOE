@@ -75,20 +75,32 @@ class _TMDTScreenState extends State<TMDTScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Add product image at the top (from local assets)
+                      Container(
+                        height: 10, // Adjust height as needed to avoid overflow
+                        width: double.infinity, // Full width of the container
+                        child: Image.asset(
+                          'assets/ZaloLogin.jpg', // Image file path
+                          fit: BoxFit.cover, // Ensure the image fits properly
+                        ),
+                      ),
+                      const SizedBox(height: 8), // Space between image and name
+
+                      // Product name
                       Text(
                         product.name,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      const SizedBox(height: 4), // Space between name and price
+
+                      // Product price
                       Text(
                         '\$${product.price.toStringAsFixed(2)}',
                         style:
                             const TextStyle(fontSize: 14, color: Colors.green),
-                      ),
-                      Text(
-                        'Stock: ${product.stock}',
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
