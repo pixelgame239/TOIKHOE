@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toikhoe/model/bacsi_model.dart';
 import 'bs_info_screen.dart'; // Import màn hình thông tin bác sĩ
 
 class MyDoctorScreen extends StatefulWidget {
@@ -100,7 +101,7 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DoctorDetailScreen(),
+                            builder: (context) => DoctorDetailScreen(currDoc: BacsiProfile('Id', 'hoten', 'chuyenmon', 0),),
                           ),
                         );
                       },

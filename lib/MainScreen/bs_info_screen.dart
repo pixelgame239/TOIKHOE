@@ -1,26 +1,9 @@
 import 'package:flutter/material.dart';
-
-
-
-class DoctorDetailApp extends StatefulWidget {
-  const DoctorDetailApp({Key? key}) : super(key: key);
-
-  @override
-  State<DoctorDetailApp> createState() => _DoctorDetailAppState();
-}
-
-class _DoctorDetailAppState extends State<DoctorDetailApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DoctorDetailScreen(),
-    );
-  }
-}
+import 'package:toikhoe/model/bacsi_model.dart';
 
 class DoctorDetailScreen extends StatefulWidget {
-  const DoctorDetailScreen({Key? key}) : super(key: key);
+  final BacsiProfile currDoc;
+  DoctorDetailScreen({Key? key, required this.currDoc}) : super(key: key);
 
   @override
   State<DoctorDetailScreen> createState() => _DoctorDetailScreenState();
@@ -42,8 +25,8 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-          'Tai, Mũi, Họng',
+        title: Text(
+          widget.currDoc.chuyenmon,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -93,19 +76,19 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
         children: [
           const CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage('assets/doctor_avatar.png'), // Avatar bác sĩ
+            backgroundImage: AssetImage('assets/ZaloLogin.jpg'), // Avatar bác sĩ
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Bác sĩ Lê Công Định',
+                Text(
+                  'Bác sĩ ${widget.currDoc.hoten}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const Text(
-                  'Tai - Mũi - Họng',
+                Text(
+                  widget.currDoc.chuyenmon,
                   style: TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 8),
@@ -209,7 +192,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   Widget buildReviewItem() {
     return ListTile(
       leading: const CircleAvatar(
-        backgroundImage: AssetImage('assets/user_avatar.png'), // Avatar người đánh giá
+        backgroundImage: AssetImage('assets/ZaloLogin.jpg'), // Avatar người đánh giá
       ),
       title: const Text(
         'Duc Quynh Tran',
