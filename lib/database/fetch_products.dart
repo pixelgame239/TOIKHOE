@@ -4,7 +4,7 @@ import 'package:toikhoe/model/product_model.dart';
 import 'connection.dart';
 
 Future<List<Product>> fetchAllProducts() async {
-  List<Product> products = [];
+  List<Product> products= [];
   final conn = await connectToRDS();
   if (conn == null) {
     print('Kết nối chưa được khởi tạo.');
@@ -17,7 +17,6 @@ Future<List<Product>> fetchAllProducts() async {
     for (var row in result) {
       products.add(Product.fromMap(row.fields));
     }
-
     print('Lấy toàn bộ thông tin sản phẩm thành công: $products');
   } catch (e) {
     print('Lỗi khi lấy thông tin sản phẩm: $e');
