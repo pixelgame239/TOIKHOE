@@ -27,7 +27,8 @@ class User {
   // Factory method to create a User from a JSON object
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['userId'] as int? ?? 0, // Mặc định là 0 nếu null
+      userId: int.tryParse(json['UserID'].toString()) ??
+          0, // Sử dụng tryParse để tránh lỗi
       name: json['name'] as String? ?? '', // Mặc định là chuỗi rỗng nếu null
       email: json['email'] as String? ?? '',
       phoneNumber: json['phone_number'] as String? ?? '',
@@ -79,6 +80,11 @@ class UserNotifier extends StateNotifier<List<User>> {
   // Load users from a JSON list (e.g., API response)
   void loadUsers(List<Map<String, dynamic>> jsonList) {
     state = jsonList.map((json) => User.fromJson(json)).toList();
+  }
+
+  // Reset the user data (e.g., on Log Out)
+  void logOut() {
+    state = []; // Reset to an empty list or initial value
   }
 }
 
