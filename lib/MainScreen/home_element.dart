@@ -8,6 +8,8 @@ import 'package:toikhoe/MainScreen/chat_screen.dart';
 import 'package:toikhoe/MainScreen/phong_kham_screen.dart';
 import 'package:toikhoe/reminderScreen/nhac_nho_screen.dart';
 
+import '../chatScreen/home_chat_screen.dart';
+
 class HomeElement extends StatefulWidget {
   const HomeElement({super.key});
 
@@ -83,7 +85,7 @@ class _HomeElementState extends State<HomeElement> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChatScreen(),
+                    builder: (context) => HomeChatScreen(),
                   ),
     
     
