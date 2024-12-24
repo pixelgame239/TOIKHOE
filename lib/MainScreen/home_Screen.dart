@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 2;
+  int currentIndex = 0;
   bool showNavi = true;
   double last_position = 0;
   ScrollController scrollController = ScrollController();
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget? _screen(int currentIndex){
     if (currentIndex == 0) {
-      return const HomeElement();
+      return  const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
     } else {
@@ -93,13 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context)
-              .size
-              .height, // Ensure the child takes the full height
-          child: _screen(currentIndex),
-        ),
+      body: currentIndex == 4
+      ? _screen(currentIndex)
+      : SingleChildScrollView(
+        child: _screen(currentIndex),
         controller: scrollController,
       ),
       bottomNavigationBar: Visibility(
@@ -114,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               currentIndex = index;
             });
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person_3), label: 'Bác sĩ'),
