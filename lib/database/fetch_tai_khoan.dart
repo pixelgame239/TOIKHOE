@@ -37,6 +37,8 @@ Future<Map<String, dynamic>?> fetchUserByPhoneNumber(String phoneNumber) async {
     );
 
     if (result.isNotEmpty) {
+      // In ra dữ liệu để kiểm tra
+      print("Thông tin người dùng: ${result.first.fields}");
       return result.first.fields; // Trả về bản ghi đầu tiên
     }
   } catch (e) {

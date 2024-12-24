@@ -77,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: Text(
           user != null
               ? 'Chào mừng\n ${user.name}' // Hiển thị tên người dùng
-              : 'Chào mừng\n Khách', // Hiển thị giá trị mặc định nếu không có người dùng
+              : 'Chào mừng\nQuý Khách', // Hiển thị giá trị mặc định nếu không có người dùng
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
