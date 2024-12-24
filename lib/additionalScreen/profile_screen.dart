@@ -87,6 +87,10 @@ class ProfileScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
                 child: ElevatedButton(
                   onPressed: () {
+                    // Reset the user state (log out)
+                    ref.read(userProvider.notifier).logOut();
+
+                    // Navigate to the login screen
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginScreen()),

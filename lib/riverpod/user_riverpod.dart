@@ -80,6 +80,11 @@ class UserNotifier extends StateNotifier<List<User>> {
   void loadUsers(List<Map<String, dynamic>> jsonList) {
     state = jsonList.map((json) => User.fromJson(json)).toList();
   }
+
+  // Reset the user data (e.g., on Log Out)
+  void logOut() {
+    state = []; // Reset to an empty list or initial value
+  }
 }
 
 // Create a Riverpod provider for the UserNotifier
