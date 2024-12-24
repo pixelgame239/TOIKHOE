@@ -1,34 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
 import 'package:toikhoe/MainScreen/tmdt_screen.dart';
 import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
 import 'package:toikhoe/database/fetch_products.dart';
+import 'package:toikhoe/model/navigationbar_control.dart';
 import 'package:toikhoe/model/product_model.dart';
+import 'package:toikhoe/riverpod/user_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
+
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentIndex = 0;
-  bool showNavi = true;
   double last_position = 0;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    scrollController.addListener(onScroll);
+    scrollController.addListener(_onScroll);
     super.initState();
+    ref.read(showNaviProvider);
   }
 
-  Widget? _screen(int currentIndex){
+  Widget? _screen(int currentIndex) {
     if (currentIndex == 0) {
-      return  const HomeElement();
+      return const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
     } else {
@@ -37,21 +41,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void onScroll() {
+  void _onScroll() {
     if (scrollController.offset > last_position &&
         scrollController.offset > 0) {
       // User scrolling down
-      if (showNavi) {
-        setState(() {
-          showNavi = false;
-        });
+      if (ref.read(showNaviProvider.notifier).state) {
+        ref.read(showNaviProvider.notifier).state= false;
       }
     } else if (scrollController.offset < last_position) {
       // User scrolling up
-      if (!showNavi) {
-        setState(() {
-          showNavi = true;
-        });
+      if (!ref.read(showNaviProvider.notifier).state) {
+          ref.read(showNaviProvider.notifier).state = true;
       }
     }
     last_position = scrollController.offset;
@@ -59,6 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).isNotEmpty
+        ? ref.watch(userProvider).first
+        : null;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -68,9 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => ProfileScreen())),
         ),
-        title: const Text(
-          'Chào mừng\n ABC XYZ',
-          style: TextStyle(
+        title: Text(
+          user != null
+              ? 'Chào mừng\n ${user.name}' // Hiển thị tên người dùng
+              : 'Chào mừng\nQuý Khách', // Hiển thị giá trị mặc định nếu không có người dùng
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -94,19 +99,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: currentIndex == 4
-      ? _screen(currentIndex)
-      : SingleChildScrollView(
-        child: _screen(currentIndex),
-        controller: scrollController,
-      ),
+          ? _screen(currentIndex)
+          : SingleChildScrollView(
+              child: _screen(currentIndex),
+              controller: scrollController,
+            ),
       bottomNavigationBar: Visibility(
-        visible: showNavi,
+        visible: ref.watch(showNaviProvider),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           currentIndex: currentIndex,
-          onTap: (index) {
+          onTap: (index){
             setState(() {
               currentIndex = index;
             });
