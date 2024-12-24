@@ -18,127 +18,125 @@ class HomeElement extends StatefulWidget {
 class _HomeElementState extends State<HomeElement> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // GridView for Top Menu Options
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            height: 200,
-            child: GridView.count(
-              crossAxisCount: 4,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-              children: [
-                HomeMenuItem(
-                  'Bác sĩ chuyên khoa',
-                  Icons.local_hospital,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BacsickScreen(),
-                      ),
-                    );
-                  },
-                ),
-                HomeMenuItem(
-                  'Bệnh án',
-                  Icons.book,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MedicalRecordsScreen(),
-                      ),
-                    );
-                  },
-                ),
-                HomeMenuItem('Bác sĩ của tôi', Icons.person_3,
-                    onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyDoctorScreen(),
-                          ),
-                        )),
-                HomeMenuItem(
-                  'Bác sĩ yêu thích',
-                  Icons.favorite,
-                  onTap: () => Navigator.push(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // GridView for Top Menu Options
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          height: 200,
+          child: GridView.count(
+            crossAxisCount: 4,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            children: [
+              HomeMenuItem(
+                'Bác sĩ chuyên khoa',
+                Icons.local_hospital,
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FavoriteDoctorsScreen(),
+                      builder: (context) => BacsickScreen(),
                     ),
-                  ),
-                ),
-                HomeMenuItem(
-                  'Phòng khám',
-                  Icons.meeting_room,
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ClinicScreen())),
-                ),
-                HomeMenuItem(
-                  'Hỏi bác sĩ',
-                  Icons.chat,
-                  onTap: () => Navigator.push(
+                  );
+                },
+              ),
+              HomeMenuItem(
+                'Bệnh án',
+                Icons.book,
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(),
+                      builder: (context) => const MedicalRecordsScreen(),
                     ),
-
-
+                  );
+                },
+              ),
+              HomeMenuItem('Bác sĩ của tôi', Icons.person_3,
+                  onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyDoctorScreen(),
+                        ),
+                      )),
+              HomeMenuItem(
+                'Bác sĩ yêu thích',
+                Icons.favorite,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoriteDoctorsScreen(),
                   ),
                 ),
-                HomeMenuItem(
-                  'Dịch vụ tại nhà',
-                  Icons.home,
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ReminderApp())),
+              ),
+              HomeMenuItem(
+                'Phòng khám',
+                Icons.meeting_room,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ClinicScreen())),
+              ),
+              HomeMenuItem(
+                'Hỏi bác sĩ',
+                Icons.chat,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(),
+                  ),
+    
+    
                 ),
-                HomeMenuItem('Xem thêm', Icons.more_horiz),
-              ],
-            ),
+              ),
+              HomeMenuItem(
+                'Dịch vụ tại nhà',
+                Icons.home,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ReminderApp())),
+              ),
+              HomeMenuItem('Xem thêm', Icons.more_horiz),
+            ],
           ),
-          SectionHeader(title: 'Bác sĩ nổi bật'),
-          Text("sẽ thêm các bác sĩ nổi bật sau khi có db"),
-
-          // Doctor Q&A Section
-          SectionHeader(title: 'Hỏi đáp với bác sĩ'),
-          QnACard(
-              title: 'Da liễu',
-              content: 'Chào bác sĩ, em đi khám da liễu cách đây 2 tuần ...',
-              doctor: 'BS. Nguyễn Ngọc Anh'),
-          QnACard(
-              title: 'Sản Phụ Khoa',
-              content: 'Chào bác sĩ em hỏi ... em canh ngày rụng trứng ...',
-              doctor: 'BS. Phạm Nhật Vượng'),
-          QnACard(
-              title: 'Nội khoa',
-              content: 'Cháu năm nay 18 tuổi ... xin bác sĩ tư vấn ...',
-              doctor: 'BS. Nguyễn Ngọc Anh'),
-
-          // Health Check Section
-          SectionHeader(title: 'Kiểm tra sức khỏe'),
-          HealthCheckCard(
-            title: 'Khám sức khỏe toàn diện dành cho mọi người',
-            price: '1.490.000đ',
-            buttonText: 'Xem ngay',
-          ),
-          // Medical Record Section
-          MedicalRecordCard(),
-          // Health News Section
-          SectionHeader(title: 'Tin tức sức khỏe mới nhất'),
-          HealthNewsCard(
-            title: 'Khỏe đẹp',
-            description: '60 giây sống khỏe mỗi ngày - Bạn đã sẵn sàng?',
-          ),
-          HealthNewsCard(
-            title: 'Bí quyết sống khỏe',
-            description: '9 lợi ích từ việc chạy bộ',
-          ),
-        ],
-      ),
+        ),
+        SectionHeader(title: 'Bác sĩ nổi bật'),
+        Text("sẽ thêm các bác sĩ nổi bật sau khi có db"),
+    
+        // Doctor Q&A Section
+        SectionHeader(title: 'Hỏi đáp với bác sĩ'),
+        QnACard(
+            title: 'Da liễu',
+            content: 'Chào bác sĩ, em đi khám da liễu cách đây 2 tuần ...',
+            doctor: 'BS. Nguyễn Ngọc Anh'),
+        QnACard(
+            title: 'Sản Phụ Khoa',
+            content: 'Chào bác sĩ em hỏi ... em canh ngày rụng trứng ...',
+            doctor: 'BS. Phạm Nhật Vượng'),
+        QnACard(
+            title: 'Nội khoa',
+            content: 'Cháu năm nay 18 tuổi ... xin bác sĩ tư vấn ...',
+            doctor: 'BS. Nguyễn Ngọc Anh'),
+    
+        // Health Check Section
+        SectionHeader(title: 'Kiểm tra sức khỏe'),
+        HealthCheckCard(
+          title: 'Khám sức khỏe toàn diện dành cho mọi người',
+          price: '1.490.000đ',
+          buttonText: 'Xem ngay',
+        ),
+        // Medical Record Section
+        MedicalRecordCard(),
+        // Health News Section
+        SectionHeader(title: 'Tin tức sức khỏe mới nhất'),
+        HealthNewsCard(
+          title: 'Khỏe đẹp',
+          description: '60 giây sống khỏe mỗi ngày - Bạn đã sẵn sàng?',
+        ),
+        HealthNewsCard(
+          title: 'Bí quyết sống khỏe',
+          description: '9 lợi ích từ việc chạy bộ',
+        ),
+      ],
     );
   }
 }
