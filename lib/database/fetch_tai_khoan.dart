@@ -23,3 +23,24 @@ Future<List<Map<String, dynamic>>> fetchAllTaiKhoan() async {
 
   return accounts;
 }
+
+Future<Map<String, dynamic>?> fetchUserByPhoneNumber(String phoneNumber) async {
+  if (conn == null) {
+    print('Kết nối cơ sở dữ liệu chưa được khởi tạo.');
+    return null;
+  }
+
+  try {
+    final result = await conn!.query(
+      "SELECT * FROM Users WHERE phone_number = ?",
+      [phoneNumber],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first.fields; // Trả về bản ghi đầu tiên
+    }
+  } catch (e) {
+    print('Lỗi khi lấy thông tin người dùng: $e');
+  }
+  return null; // Trả về null nếu không tìm thấy
+}
