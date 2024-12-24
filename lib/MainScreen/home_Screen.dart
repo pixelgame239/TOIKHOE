@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
 import 'package:toikhoe/MainScreen/tmdt_screen.dart';
 import 'package:toikhoe/additionalScreen/mycart_screen.dart';
@@ -8,13 +9,13 @@ import 'package:toikhoe/additionalScreen/profile_screen.dart';
 import 'package:toikhoe/database/fetch_products.dart';
 import 'package:toikhoe/model/product_model.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentIndex = 0;
   bool showNavi = true;
   double last_position = 0;
@@ -59,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final productList = ref.read(ListProduct);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -106,9 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           currentIndex: currentIndex,
-          onTap: (index) {
+          onTap: (index) async {
             setState(() {
               currentIndex = index;
+
             });
           },
           items: const [

@@ -11,7 +11,7 @@ class TMDTScreen extends StatefulWidget {
 }
 
 class _TMDTScreenState extends State<TMDTScreen> {
-  late Future<List<Product>> _productsFuture;
+  late Future<listProduct> _productsFuture;
 
   @override
   void initState() {
