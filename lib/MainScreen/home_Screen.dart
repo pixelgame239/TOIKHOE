@@ -7,6 +7,7 @@ import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
 import 'package:toikhoe/database/fetch_products.dart';
+import 'package:toikhoe/model/navigationbar_control.dart';
 import 'package:toikhoe/model/product_model.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -17,14 +18,14 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentIndex = 0;
-  bool showNavi = true;
   double last_position = 0;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    scrollController.addListener(onScroll);
+    scrollController.addListener(_onScroll);
     super.initState();
+    ref.read(showNaviProvider);
   }
 
   Widget? _screen(int currentIndex){
@@ -38,21 +39,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  void onScroll() {
+  void _onScroll() {
     if (scrollController.offset > last_position &&
         scrollController.offset > 0) {
       // User scrolling down
-      if (showNavi) {
-        setState(() {
-          showNavi = false;
-        });
+      if (ref.read(showNaviProvider.notifier).state) {
+        ref.read(showNaviProvider.notifier).state= false;
       }
     } else if (scrollController.offset < last_position) {
       // User scrolling up
-      if (!showNavi) {
-        setState(() {
-          showNavi = true;
-        });
+      if (!ref.read(showNaviProvider.notifier).state) {
+          ref.read(showNaviProvider.notifier).state = true;
       }
     }
     last_position = scrollController.offset;
@@ -60,7 +57,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final productList = ref.read(ListProduct);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -102,16 +98,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         controller: scrollController,
       ),
       bottomNavigationBar: Visibility(
-        visible: showNavi,
+        visible: ref.watch(showNaviProvider),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           currentIndex: currentIndex,
-          onTap: (index) async {
+          onTap: (index){
             setState(() {
               currentIndex = index;
-
             });
           },
           items: const [

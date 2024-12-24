@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:toikhoe/database/fetch_products.dart';
 
 class Product extends ChangeNotifier {
   final int productID;
@@ -37,11 +38,28 @@ final listProductProvider = StateNotifierProvider<ListProduct, List<Product>>((r
 class ListProduct extends StateNotifier<List<Product>> {
   ListProduct(List<Product> state) : super(state);
 
+  Future<void> fetchProducts() async{
+    List<Product> products = await fetchAllProducts();
+    state = products;
+  }
   void addProduct(Product singleProduct) {
-    // Immutable state update
     state = [...state, singleProduct];
   }
+   void removeProduct(int productId) {
+    state = state.where((product) => product.productID != productId).toList();
+  }
 
-  // You can add other methods to modify the list if necessary
+  // Modify a product in the list
+  void modifyProduct(Product modifiedProduct) {
+    final index = state.indexWhere((product) => product.productID == modifiedProduct.productID);
+    
+    if (index != -1) {
+      state = [
+        ...state.sublist(0, index),
+        modifiedProduct,
+        ...state.sublist(index + 1),
+      ];
+    }
+  }
 }
 
