@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/MainScreen/home_screen.dart';
+import 'package:toikhoe/database/fetch_tai_khoan.dart';
 import 'package:toikhoe/database/fetch_userID_password.dart';
 import 'package:toikhoe/loginScreen/register_screen.dart';
+import 'package:toikhoe/riverpod/user_riverpod.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final TextEditingController userController = TextEditingController();
@@ -13,17 +16,32 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String errorMessage = '';
   bool valid = true;
   bool isLoading = false;
-  Map<String, int> loginAttempts =
-      {}; // Theo dõi số lần đăng nhập sai theo tài khoản
+  Map<String, int> loginAttempts = {};
 
   @override
   void initState() {
     super.initState();
-    initializeConnection(); // Khởi tạo kết nối RDS
+    initializeConnection();
+  }
+
+  void setUserToProvider(Map<String, String> userInfo) {
+    final user = User(
+      userId: int.parse(userInfo['user_id'] ?? '0'),
+      name: userInfo['name'] ?? '',
+      email: userInfo['email'] ?? '',
+      phoneNumber: userInfo['phone_number'] ?? '',
+      address: userInfo['address'] ?? '',
+      status: userInfo['status'] ?? '',
+      role: userInfo['role'] ?? '',
+      province: userInfo['province'] ?? '',
+      password: userInfo['password'] ?? '',
+    );
+
+    ref.read(userProvider.notifier).addUser(user);
   }
 
   Future<String> authenticateUser(String userName, String password) async {
@@ -39,15 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
       for (var account in accounts) {
         if (account['phone_number'] == userName) {
           if (account['password'] == password) {
-            loginAttempts
-                .remove(userName); // Xóa số lần đăng nhập sai nếu thành công
+            loginAttempts.remove(userName);
             return "success";
           } else {
-            // Thêm logic giới hạn số lần đăng nhập sai
             loginAttempts[userName] = (loginAttempts[userName] ?? 0) + 1;
 
             if (loginAttempts[userName]! >= 5) {
-              return "account_locked"; // Khóa tài khoản sau 5 lần sai
+              return "account_locked";
             }
             return "wrong_password";
           }
@@ -64,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String userName = widget.userController.text.trim();
     String password = widget.passController.text.trim();
 
-    // Kiểm tra đầu vào
     if (userName.isEmpty || password.isEmpty) {
       setState(() {
         errorMessage = 'Tài khoản và mật khẩu không được để trống';
@@ -78,26 +93,34 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      String authResult = await authenticateUser(userName, password);
+      // Lấy thông tin người dùng từ database
+      final userInfo = await fetchUserByPhoneNumber(userName);
 
-      if (authResult == "success") {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      } else if (authResult == "wrong_password") {
-        setState(() {
-          errorMessage = 'Sai mật khẩu';
-          valid = false;
-        });
-      } else if (authResult == "user_not_found") {
+      if (userInfo != null) {
+        // Kiểm tra mật khẩu
+        if (userInfo['password'] == password) {
+          // Lưu thông tin người dùng vào Riverpod
+          final user = User.fromJson(userInfo);
+          ref.read(userProvider.notifier).addUser(user);
+
+          print("Thông tin người dùng sau khi đăng nhập: ${user.toJson()}");
+
+          // Chuyển đến màn hình chính
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else {
+          setState(() {
+            errorMessage = 'Sai mật khẩu';
+            valid = false;
+          });
+        }
+      } else {
         setState(() {
           errorMessage = 'Tài khoản không tồn tại';
           valid = false;
         });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Lỗi kết nối tới máy chủ. Vui lòng thử lại sau!')),
-        );
       }
     } catch (e) {
       print("Lỗi đăng nhập: $e");

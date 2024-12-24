@@ -9,9 +9,11 @@ import 'package:toikhoe/additionalScreen/profile_screen.dart';
 import 'package:toikhoe/database/fetch_products.dart';
 import 'package:toikhoe/model/navigationbar_control.dart';
 import 'package:toikhoe/model/product_model.dart';
+import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
+
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
@@ -28,9 +30,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.read(showNaviProvider);
   }
 
-  Widget? _screen(int currentIndex){
+  Widget? _screen(int currentIndex) {
     if (currentIndex == 0) {
-      return  const HomeElement();
+      return const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
     } else {
@@ -57,6 +59,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).isNotEmpty
+        ? ref.watch(userProvider).first
+        : null;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -66,9 +71,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onPressed: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => ProfileScreen())),
         ),
-        title: const Text(
-          'Chào mừng\n ABC XYZ',
-          style: TextStyle(
+        title: Text(
+          user != null
+              ? 'Chào mừng\n ${user.name}' // Hiển thị tên người dùng
+              : 'Chào mừng\nQuý Khách', // Hiển thị giá trị mặc định nếu không có người dùng
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -92,11 +99,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: currentIndex == 4
-      ? _screen(currentIndex)
-      : SingleChildScrollView(
-        child: _screen(currentIndex),
-        controller: scrollController,
-      ),
+          ? _screen(currentIndex)
+          : SingleChildScrollView(
+              child: _screen(currentIndex),
+              controller: scrollController,
+            ),
       bottomNavigationBar: Visibility(
         visible: ref.watch(showNaviProvider),
         child: BottomNavigationBar(
