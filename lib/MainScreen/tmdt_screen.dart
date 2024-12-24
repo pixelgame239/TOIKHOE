@@ -102,8 +102,6 @@ class _TMDTScreenState extends State<TMDTScreen> {
                         style:
                             const TextStyle(fontSize: 14, color: Colors.green),
                       ),
-
-
                     ],
                   ),
                 ),
