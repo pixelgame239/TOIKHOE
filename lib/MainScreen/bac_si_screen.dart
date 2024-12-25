@@ -44,47 +44,49 @@ class _BacSiScreenState extends ConsumerState<BacSiScreen> {
               return const Center(child: Text('Không tìm thấy bác sĩ nào.'));
             }
 
-            return ListView.builder(
-              itemCount: doctors.length,
-              itemBuilder: (context, index) {
-                final doctor = doctors[index];
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child:
-                          doctor['name'] != null && doctor['name']!.isNotEmpty
-                              ? Text(doctor['name']![0])
-                              : const Icon(Icons.person),
-                    ),
-                    title: Text(doctor['name'] ?? 'Không rõ'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(doctor['specialization'] ?? 'Chưa rõ'),
-                        Text(
-                          doctor['experience'] != null
-                              ? '${doctor['experience']} năm kinh nghiệm'
-                              : 'Kinh nghiệm chưa cập nhật',
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BacSiDetailScreen(
-                            doctorData: doctor,
+            return Scrollbar(
+              child: ListView.builder(
+                itemCount: doctors.length,
+                itemBuilder: (context, index) {
+                  final doctor = doctors[index];
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child:
+                            doctor['name'] != null && doctor['name']!.isNotEmpty
+                                ? Text(doctor['name']![0])
+                                : const Icon(Icons.person),
+                      ),
+                      title: Text(doctor['name'] ?? 'Không rõ'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(doctor['specialization'] ?? 'Chưa rõ'),
+                          Text(
+                            doctor['experience'] != null
+                                ? '${doctor['experience']} năm kinh nghiệm'
+                                : 'Kinh nghiệm chưa cập nhật',
                           ),
-                        ),
-                      );
-                    },
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BacSiDetailScreen(
+                              doctorData: doctor,
+                            ),
+                          ),
+                        );
+                      },
 
-                    isThreeLine: true, // Cho phép hiển thị 3 dòng
-                  ),
-                );
-              },
+                      isThreeLine: true, // Cho phép hiển thị 3 dòng
+                    ),
+                  );
+                },
+              ),
             );
           }
         },

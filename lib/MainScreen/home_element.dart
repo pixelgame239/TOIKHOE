@@ -59,7 +59,7 @@ class _HomeElementState extends State<HomeElement> {
                   onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BacSiScreen(),
+                          builder: (context) => MyDoctorScreen(),
                         ),
                       )),
               HomeMenuItem(
