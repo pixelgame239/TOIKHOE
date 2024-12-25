@@ -100,8 +100,6 @@ class _HomeElementState extends State<HomeElement> {
             ],
           ),
         ),
-        SectionHeader(title: 'Bác sĩ nổi bật'),
-        Text("sẽ thêm các bác sĩ nổi bật sau khi có db"),
 
         // Doctor Q&A Section
         SectionHeader(title: 'Hỏi đáp với bác sĩ'),

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/loginScreen/login_screen.dart'; // Import Login Screen
 import 'package:toikhoe/loginScreen/register_screen.dart'; // Import Register Screen
 
-
 void main() => runApp(ProviderScope(child: MyApp()));
 
 class MyApp extends StatelessWidget {
@@ -14,10 +13,11 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/login', // Màn hình mặc định khi chạy ứng dụng
       routes: {
-        '/login': (context) => LoginScreen(), // Định nghĩa route cho LoginScreen
-        '/register': (context) => RegisterPage(), // Định nghĩa route cho RegisterPage
+        '/login': (context) =>
+            LoginScreen(), // Định nghĩa route cho LoginScreen
+        '/register': (context) =>
+            RegisterPage(), // Định nghĩa route cho RegisterPage
       },
-
     );
   }
 }
