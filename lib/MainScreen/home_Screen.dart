@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/MainScreen/bac_si_screen.dart';
 import 'package:toikhoe/MainScreen/home_element.dart';
 import 'package:toikhoe/MainScreen/tmdt_screen.dart';
 import 'package:toikhoe/additionalScreen/mycart_screen.dart';
@@ -35,6 +36,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
+    } else if (currentIndex == 1) {
+      return const BacSiScreen();
     } else {
       // You can add more conditions if needed for other screens
       return Container(); // Return an empty container for other indexes
@@ -46,12 +49,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         scrollController.offset > 0) {
       // User scrolling down
       if (ref.read(showNaviProvider.notifier).state) {
-        ref.read(showNaviProvider.notifier).state= false;
+        ref.read(showNaviProvider.notifier).state = false;
       }
     } else if (scrollController.offset < last_position) {
       // User scrolling up
       if (!ref.read(showNaviProvider.notifier).state) {
-          ref.read(showNaviProvider.notifier).state = true;
+        ref.read(showNaviProvider.notifier).state = true;
       }
     }
     last_position = scrollController.offset;
@@ -98,12 +101,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: currentIndex == 4
-          ? _screen(currentIndex)
-          : SingleChildScrollView(
-              child: _screen(currentIndex),
+      body: Builder(
+        builder: (context) {
+          if (currentIndex == 4 || currentIndex == 1) {
+            return _screen(currentIndex) ?? const SizedBox.shrink();
+          } else {
+            return SingleChildScrollView(
               controller: scrollController,
-            ),
+              child: _screen(currentIndex) ?? const SizedBox.shrink(),
+            );
+          }
+        },
+      ),
+
+      // currentIndex == 4
+      //     ? _screen(currentIndex)
+      //     : ,
       bottomNavigationBar: Visibility(
         visible: ref.watch(showNaviProvider),
         child: BottomNavigationBar(
@@ -111,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           currentIndex: currentIndex,
-          onTap: (index){
+          onTap: (index) {
             setState(() {
               currentIndex = index;
             });

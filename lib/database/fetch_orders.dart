@@ -3,6 +3,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/model/order_model.dart';
 
+
 Future<List<OrderModel>?> fetchAllOrders(int userID) async{
   MySqlConnection? conn = await connectToRDS();
   List<OrderModel> listOrders = [];
@@ -15,21 +16,21 @@ Future<List<OrderModel>?> fetchAllOrders(int userID) async{
       curOrder.productName = res['name'];
       curOrder.quantity = res['quantity'];
       curOrder.unitPrice = res['price'];
+
       curOrder.totalAmount = res['totalAmount'];
       curOrder.shippingFee = res['shipping_fee'];
       curOrder.discountCode = res['discount_code'];
-      if(res['paymentStatus']=='Pending'){
+      if (res['paymentStatus'] == 'Pending') {
         curOrder.paymentStatus = 'Đang chờ thanh toán';
-      }
-      else if(res['paymentStatus']=='Paid'){
+      } else if (res['paymentStatus'] == 'Paid') {
         curOrder.paymentStatus = 'Đã thanh toán';
-      }
-      else{
+      } else {
         curOrder.paymentStatus = 'Đã huỷ';
       }
       curOrder.dateAdd = res['created_at'];
       listOrders.add(curOrder);
     }
+
     return listOrders;
   }
   else{
@@ -47,3 +48,4 @@ Future<void> addOrder(int userID, int productID, int quantity, double price, dou
     }
   }
 }
+
