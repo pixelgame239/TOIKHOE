@@ -9,7 +9,7 @@ class Product extends ChangeNotifier {
   final String description;
   final double price;
   final int stock;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   Product({
     required this.productID,
@@ -34,7 +34,12 @@ class Product extends ChangeNotifier {
 final listProductProvider = StateNotifierProvider<ListProduct, List<Product>>((ref) {
   return ListProduct([]);
 });
-
+class SingleProduct extends StateNotifier<Product>{
+  SingleProduct(super.state);
+  Future<void> fetchSingleProduct() async{
+    // Product singleProduct = await fetchSingleProduct();
+  }
+}
 class ListProduct extends StateNotifier<List<Product>> {
   ListProduct(List<Product> state) : super(state);
 
