@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toikhoe/MainScreen/bac_si_screen.dart';
 import 'package:toikhoe/MainScreen/benh_an_screen.dart';
 import 'package:toikhoe/MainScreen/bsck_Screen.dart';
 import 'package:toikhoe/MainScreen/bscuatoi_screen.dart';
@@ -58,7 +59,7 @@ class _HomeElementState extends State<HomeElement> {
                   onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MyDoctorScreen(),
+                          builder: (context) => BacSiScreen(),
                         ),
                       )),
               HomeMenuItem(
@@ -99,7 +100,7 @@ class _HomeElementState extends State<HomeElement> {
         ),
         SectionHeader(title: 'Bác sĩ nổi bật'),
         Text("sẽ thêm các bác sĩ nổi bật sau khi có db"),
-    
+
         // Doctor Q&A Section
         SectionHeader(title: 'Hỏi đáp với bác sĩ'),
         QnACard(
@@ -114,7 +115,7 @@ class _HomeElementState extends State<HomeElement> {
             title: 'Nội khoa',
             content: 'Cháu năm nay 18 tuổi ... xin bác sĩ tư vấn ...',
             doctor: 'BS. Nguyễn Ngọc Anh'),
-    
+
         // Health Check Section
         SectionHeader(title: 'Kiểm tra sức khỏe'),
         HealthCheckCard(

@@ -514,15 +514,21 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                       if (_formKey.currentState!.validate()) {
                         int danTocId =
                             1; // Thay bằng logic lấy ID từ bảng DanToc
-                        int diaChiId =
-                            1; // Thay bằng logic lấy ID từ bảng DiaChi
+                        int soNhaId =
+                            1; // Thay bằng logic lấy ID từ bảng địa chỉ (số nhà)
 
                         bool success = await insertBenhAn(
                           _tenController.text,
                           danTocId,
                           _ngaySinhDate,
+                          DateTime.now().year -
+                              _ngaySinhDate.year, // Tính tuổi từ ngày sinh
                           _gender,
-                          diaChiId,
+                          soNhaId,
+                          _thonPhoController.text,
+                          _xaPhuongController.text,
+                          _huyenController.text,
+                          _tinhThanhPhoController.text,
                           _soTheBHYTController.text,
                           _ngayNhapVienDate,
                           _ngayRaVienDate,
