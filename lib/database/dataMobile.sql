@@ -99,6 +99,42 @@ CREATE TABLE Notifications (
     FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE
 );
 
+
+CREATE TABLE BenhAn (
+    id INT AUTO_INCREMENT PRIMARY KEY,         -- Mã bệnh án (tự tăng)
+    ten VARCHAR(255) NOT NULL,                 -- Tên bệnh nhân
+    dan_toc VARCHAR(100),                      -- Dân tộc
+    ngay_sinh DATE NOT NULL,                   -- Ngày sinh
+    tuoi INT,                                  -- Tuổi
+    gioi_tinh ENUM('Nam', 'Nữ') NOT NULL,      -- Giới tính
+    so_nha VARCHAR(255),                       -- Số nhà
+    thon_pho VARCHAR(255),                     -- Thôn, phố
+    xa_phuong VARCHAR(255),                    -- Xã, phường
+    huyen VARCHAR(255),                        -- Huyện
+    tinh_thanh_pho VARCHAR(255),               -- Tỉnh, thành phố
+    so_the_bhyt VARCHAR(20),                   -- Số thẻ BHYT
+    ngay_nhap_vien DATE,                       -- Ngày nhập viện
+    ngay_ra_vien DATE,                         -- Ngày ra viện
+    chan_doan_vao_vien VARCHAR(500),           -- Chẩn đoán vào viện
+    chan_doan_ra_vien VARCHAR(500),            -- Chẩn đoán ra viện
+    ly_do_vao_vien VARCHAR(500),               -- Lý do vào viện
+    tom_tat_qua_trinh_benh_ly VARCHAR(2000),   -- Tóm tắt quá trình bệnh lý và diễn biến lâm sàng
+    ngay_tao TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Ngày tạo bản ghi
+    ngay_cap_nhat TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Ngày cập nhật bản ghi
+);
+
+INSERT INTO BenhAn (
+    ten, dan_toc, ngay_sinh, tuoi, gioi_tinh, so_nha, thon_pho, xa_phuong, huyen, tinh_thanh_pho,
+    so_the_bhyt, ngay_nhap_vien, ngay_ra_vien, chan_doan_vao_vien, chan_doan_ra_vien,
+    ly_do_vao_vien, tom_tat_qua_trinh_benh_ly, hinh_anh
+) VALUES (
+    'Nguyen Van A', 'Kinh', '1990-05-20', 34, 'Nam', '123', 'Thon X', 'Phuong Y', 'Huyen Z', 'Thanh pho H',
+    '1234567890', '2023-12-01', '2023-12-15', 'Viêm phổi', 'Khỏi bệnh',
+    'Ho khan kéo dài', 'Bệnh nhân đã đáp ứng tốt với thuốc', '/path/to/image.jpg'
+);
+
+
+
 INSERT INTO Users (id, username, email, password, created_at) VALUES
 (1, 'john_doe', 'john.doe@example.com', 'password123', NOW()),
 (2, 'jane_smith', 'jane.smith@example.com', 'password123', NOW()),
