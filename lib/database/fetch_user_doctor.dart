@@ -2,8 +2,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
 
 Future<List<Map<String, dynamic>>> fetchUsersAndDoctors() async {
-  // Kết nối đến cơ sở dữ liệu
-  final conn = await connectToRDS(); // Sử dụng hàm kết nối đã viết trước đó
+  final conn = await connectToRDS();
 
   if (conn == null) {
     print('Không thể kết nối đến cơ sở dữ liệu.');
@@ -11,7 +10,6 @@ Future<List<Map<String, dynamic>>> fetchUsersAndDoctors() async {
   }
 
   try {
-    // Thực hiện truy vấn JOIN giữa bảng Users và Doctors
     final results = await conn.query('''
       SELECT 
         Users.UserID,
@@ -26,13 +24,13 @@ Future<List<Map<String, dynamic>>> fetchUsersAndDoctors() async {
         Doctors.specialization,
         Doctors.experience,
         Doctors.working_hours,
-        Doctors.location
+        Doctors.location,
+        Doctors.isFavourited
       FROM Users
       LEFT JOIN Doctors ON Users.UserID = Doctors.userID
     ''');
 
-    // Chuyển đổi kết quả thành danh sách các map
-    List<Map<String, dynamic>> data = results.map((row) {
+    return results.map((row) {
       return {
         'UserID': row['UserID'],
         'name': row['name'],
@@ -47,19 +45,128 @@ Future<List<Map<String, dynamic>>> fetchUsersAndDoctors() async {
         'experience': row['experience'],
         'working_hours': row['working_hours'],
         'location': row['location'],
+        'isFavourited': row['isFavourited'],
       };
     }).toList();
-    print(data);
-
-    return data;
   } catch (e) {
     print('Lỗi khi lấy dữ liệu: $e');
     return [];
+  } finally {
+    await conn.close();
+    print('Kết nối đã được đóng.');
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchFavouriteDoctors() async {
+  final conn = await connectToRDS();
+
+  if (conn == null) {
+    print('Không thể kết nối đến cơ sở dữ liệu.');
+    return [];
   }
 
-  // finally {
-  //   // Đóng kết nối sau khi truy vấn xong
-  //   await conn.close();
-  //   print('Kết nối đã được đóng.');
-  // }
+  try {
+    final results = await conn.query('''
+      SELECT 
+        Users.UserID,
+        Users.name,
+        Users.email,
+        Users.phone_number,
+        Users.address,
+        Users.status,
+        Users.role,
+        Users.province,
+        Doctors.doctorID,
+        Doctors.specialization,
+        Doctors.experience,
+        Doctors.working_hours,
+        Doctors.location,
+        Doctors.isFavourited
+      FROM Users
+      LEFT JOIN Doctors ON Users.UserID = Doctors.userID
+      WHERE Doctors.isFavourited = 1
+    ''');
+
+    return results.map((row) {
+      return {
+        'UserID': row['UserID'],
+        'name': row['name'],
+        'email': row['email'],
+        'phone_number': row['phone_number'],
+        'address': row['address'],
+        'status': row['status'],
+        'role': row['role'],
+        'province': row['province'],
+        'doctorID': row['doctorID'],
+        'specialization': row['specialization'],
+        'experience': row['experience'],
+        'working_hours': row['working_hours'],
+        'location': row['location'],
+        'isFavourited': row['isFavourited'],
+      };
+    }).toList();
+  } catch (e) {
+    print('Lỗi khi lấy dữ liệu: $e');
+    return [];
+  } finally {
+    await conn.close();
+    print('Kết nối đã được đóng.');
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchDoctors() async {
+  final conn = await connectToRDS();
+
+  if (conn == null) {
+    print('Không thể kết nối đến cơ sở dữ liệu.');
+    return [];
+  }
+
+  try {
+    final results = await conn.query('''
+      SELECT 
+        Users.UserID,
+        Users.name,
+        Users.email,
+        Users.phone_number,
+        Users.address,
+        Users.status,
+        Users.role,
+        Users.province,
+        Doctors.doctorID,
+        Doctors.specialization,
+        Doctors.experience,
+        Doctors.working_hours,
+        Doctors.location,
+        Doctors.isFavourited
+      FROM Users
+      LEFT JOIN Doctors ON Users.UserID = Doctors.userID
+      WHERE Users.role = 'Doctor'
+    ''');
+
+    return results.map((row) {
+      return {
+        'UserID': row['UserID'],
+        'name': row['name'],
+        'email': row['email'],
+        'phone_number': row['phone_number'],
+        'address': row['address'],
+        'status': row['status'],
+        'role': row['role'],
+        'province': row['province'],
+        'doctorID': row['doctorID'],
+        'specialization': row['specialization'],
+        'experience': row['experience'],
+        'working_hours': row['working_hours'],
+        'location': row['location'],
+        'isFavourited': row['isFavourited'],
+      };
+    }).toList();
+  } catch (e) {
+    print('Lỗi khi lấy dữ liệu: $e');
+    return [];
+  } finally {
+    await conn.close();
+    print('Kết nối đã được đóng.');
+  }
 }
