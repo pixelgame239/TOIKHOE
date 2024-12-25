@@ -1,12 +1,14 @@
 // chat_doc_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/database/message_operation.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final int userId;
+
   final String userName;
   const ChatScreen({Key? key, required this.userId, required this.userName}) : super(key: key);
 
@@ -21,17 +23,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   late int _senderId; // Assuming senderId is set here
 
+
   @override
   void initState() {
     super.initState();
+
     _senderId =  ref.read(userProvider).first.userId;
     _receiverId = widget.userId;
     _receiverName = widget.userName;
+
     _loadMessages();
   }
 
   void _loadMessages() async {
+
     final messages = await fetchMessages(_senderId, _receiverId);
+
     setState(() {
       _messages.addAll(messages);
     });
@@ -39,7 +46,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   void _sendMessage() async {
     if (_messageController.text.trim().isNotEmpty) {
+
       final message = _messageController.text;
+
       final timestamp = DateTime.now();
 
       setState(() {
@@ -50,7 +59,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         });
       });
 
+
       await sendMessage(_senderId, _receiverId, message);
+
       _messageController.clear();
     }
   }
@@ -219,4 +230,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
     );
   }
+
 }
+

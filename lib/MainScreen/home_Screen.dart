@@ -12,6 +12,8 @@ import 'package:toikhoe/model/navigationbar_control.dart';
 import 'package:toikhoe/model/product_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
+import 'package:toikhoe/chatScreen/home_chat_screen.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
 
@@ -36,9 +38,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
+
     } else if (currentIndex == 1) {
       return const BacSiScreen();
     } else {
+
+    }
+
+
+
       // You can add more conditions if needed for other screens
       return Container(); // Return an empty container for other indexes
     }
