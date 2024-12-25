@@ -4,7 +4,8 @@ import 'package:toikhoe/model/product_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class BuyScreen extends ConsumerStatefulWidget {
-  const BuyScreen({super.key, required this.buyProduct, required this.quantity});
+  const BuyScreen(
+      {super.key, required this.buyProduct, required this.quantity});
   final Product buyProduct;
   final int quantity;
 
@@ -36,12 +37,16 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text('${user.address}', style: const TextStyle(color: Colors.grey)),
+                          Text(user.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          Text('${user.address}',
+                              style: const TextStyle(color: Colors.grey)),
                         ],
                       ),
                     ),
-                    const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    const Icon(Icons.arrow_forward_ios,
+                        size: 16, color: Colors.grey),
                   ],
                 ),
               ),
@@ -65,23 +70,30 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Số lượng: ${widget.quantity}'),
-                        Text('Đơn giá: ${widget.buyProduct.price} đ', style: const TextStyle(color: Colors.red)),
+                        Text('Đơn giá: ${widget.buyProduct.price} đ',
+                            style: const TextStyle(color: Colors.red)),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, bottom: 8.0),
                     child: Row(
                       children: [
-                        Checkbox(
-                          value: false,
-                          onChanged: (value) {
-                            // Xử lý bảo hiểm (nếu cần)
-                          },
+                        Flexible(
+                          child: Checkbox(
+                            value: false,
+                            onChanged: (value) {
+                              // Xử lý bảo hiểm (nếu cần)
+                            },
+                          ),
                         ),
-                        const Text('Bảo hiểm thiết bị điện tử'),
-                        const Spacer(),
-                        Text('+ 13.999 đ', style: const TextStyle(color: Colors.red)),
+                        Flexible(
+                            child: const Text('Bảo hiểm thiết bị điện tử')),
+                        Flexible(
+                          child: Text('+ 13.999 đ',
+                              style: const TextStyle(color: Colors.red)),
+                        ),
                       ],
                     ),
                   ),
@@ -100,7 +112,8 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    const Text('Đảm bảo nhận hàng từ 26 - 27 Tháng 12',style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('Đảm bảo nhận hàng từ 26 - 27 Tháng 12',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -112,7 +125,8 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
               child: ListTile(
                 title: const Text('Phương thức thanh toán'),
                 subtitle: Text('Ví điện tử'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    size: 16, color: Colors.grey),
               ),
             ),
 
@@ -135,7 +149,7 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Phí vận chuyển'),
-                      const Text('32.800 đ'),
+                      const Text('0đ'),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -143,17 +157,19 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Giảm giá'),
-                      const Text('-24.800 đ', style: TextStyle(color: Colors.red)),
+                      const Text('0đ', style: TextStyle(color: Colors.red)),
                     ],
                   ),
                   const Divider(thickness: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Tổng thanh toán', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text('Tổng thanh toán',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                        '${widget.buyProduct.price * widget.quantity + 8000} đ', // Adjust total based on discounts/shipping
-                        style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                        '${widget.buyProduct.price * widget.quantity} đ', // Adjust total based on discounts/shipping
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -174,7 +190,8 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
                   minimumSize: const Size.fromHeight(50),
                   backgroundColor: Colors.red,
                 ),
-                child: const Text('Đặt hàng', style: TextStyle(color: Colors.white, fontSize: 16)),
+                child: const Text('Đặt hàng',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ),
           ],

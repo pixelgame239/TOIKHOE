@@ -38,19 +38,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const HomeElement();
     } else if (currentIndex == 4) {
       return const TMDTScreen();
-
     } else if (currentIndex == 1) {
       return const BacSiScreen();
-    } else {
+    } else if (currentIndex == 3) {
+      return const HomeChatScreen();
+    } else {}
 
-    }
+    // You can add more conditions if needed for other screens
+    return Container(); // Return an empty container for other indexes
+  }
 
-
-
-      // You can add more conditions if needed for other screens
-      return Container(); // Return an empty container for other indexes
-    }
-      void _onScroll() {
+  void _onScroll() {
     if (scrollController.offset > last_position &&
         scrollController.offset > 0) {
       // User scrolling down
@@ -65,10 +63,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     last_position = scrollController.offset;
   }
-    
-      @override
-      Widget build(BuildContext context) {
-          final user = ref.watch(userProvider).isNotEmpty
+
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).isNotEmpty
         ? ref.watch(userProvider).first
         : null;
     return Scaffold(
@@ -109,7 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: Builder(
         builder: (context) {
-          if (currentIndex == 4 || currentIndex == 1) {
+          if (currentIndex == 4 || currentIndex == 1 || currentIndex == 3) {
             return _screen(currentIndex) ?? const SizedBox.shrink();
           } else {
             return SingleChildScrollView(
@@ -151,4 +149,4 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-  }
+}

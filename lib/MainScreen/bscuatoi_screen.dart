@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toikhoe/MainScreen/bac_si_detail_screen.dart';
 import 'package:toikhoe/MainScreen/bs_info_screen.dart';
 import 'package:toikhoe/database/fetch_user_doctor.dart';
 
@@ -117,13 +118,14 @@ class _MyDoctorScreenState extends State<MyDoctorScreen> {
                               children: [
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         DoctorDetailScreen(currDoc: doctor),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BacSiDetailScreen(
+                                          doctorData: doctor,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
