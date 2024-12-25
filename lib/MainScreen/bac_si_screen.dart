@@ -51,11 +51,10 @@ class _BacSiScreenState extends ConsumerState<BacSiScreen> {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ListTile(
                     leading: CircleAvatar(
-                      child: Text(
-                        doctor['name'] != null && doctor['name']!.isNotEmpty
-                            ? doctor['name'][0]
-                            : '?',
-                      ),
+                      child:
+                          doctor['name'] != null && doctor['name']!.isNotEmpty
+                              ? Text(doctor['name']![0])
+                              : const Icon(Icons.person),
                     ),
                     title: Text(doctor['name'] ?? 'Không rõ'),
                     subtitle: Text(doctor['specialization'] ?? 'Chưa rõ'),
