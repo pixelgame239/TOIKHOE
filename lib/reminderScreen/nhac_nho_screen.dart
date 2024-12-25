@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toikhoe/reminderScreen/tao_reminder_screen.dart';
 
-import '../MainScreen/home_Screen.dart';
+import '../MainScreen/home_screen.dart';
 
 class ReminderApp extends StatefulWidget {
   @override

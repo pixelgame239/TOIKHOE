@@ -1,6 +1,7 @@
 // chat_doc_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/database/message_operation.dart';
 import 'package:toikhoe/model/message_model.dart';
@@ -8,6 +9,7 @@ import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final int userId;
+
   final String userName;
   const ChatScreen({Key? key, required this.userId, required this.userName}) : super(key: key);
 
@@ -24,6 +26,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   late Timer _pollingTimer;
   ScrollController messageScroll = ScrollController();
 
+
   @override
   void dispose() {
     _pollingTimer.cancel();
@@ -32,9 +35,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
+
     _senderId =  ref.read(userProvider).first.userId;
     _receiverId = widget.userId;
     _receiverName = widget.userName;
+
     _loadMessages();
     _pollingTimer = Timer.periodic(const Duration(seconds: 1), (timer) async{
       if(mounted){
@@ -55,6 +60,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void _loadMessages() async {
     _messages.clear();
     final messages = await fetchMessages(_senderId, _receiverId);
+
     setState(() {
       _messages.addAll(messages);
     });
@@ -62,7 +68,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   void _sendMessage() async {
     if (_messageController.text.trim().isNotEmpty) {
+
       final message = _messageController.text;
+
       final timestamp = DateTime.now();
       setState(() {
         _messages.add({
@@ -72,6 +80,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         });
       });
       await sendMessage(_senderId, _receiverId, message);
+
       _messageController.clear();
       _scrollToBottom();
     }
@@ -241,4 +250,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
     );
   }
+
 }
+
