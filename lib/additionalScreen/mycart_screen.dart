@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/MainScreen/product_detail_screen.dart';
+import 'package:toikhoe/database/fetch_products.dart';
 import 'package:toikhoe/model/order_model.dart';
+import 'package:toikhoe/model/product_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class MyCartScreen extends ConsumerStatefulWidget {
@@ -11,6 +14,7 @@ class MyCartScreen extends ConsumerStatefulWidget {
 }
 
 class MyCartScreenState extends ConsumerState<MyCartScreen> {
+  double allOrdersTotalAmount = 0;
   @override
   void initState() {
     super.initState();
@@ -21,7 +25,9 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(ordersProvider);
-
+    for(var order in orders){
+      allOrdersTotalAmount+=order.totalAmount;
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Giỏ hàng'),
@@ -81,6 +87,11 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                         ),
                         // Thông tin sản phẩm
                         ListTile(
+                          onTap: () async{
+                            Product curProduct = await fetchSingleProduct(order.productID);
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductDetailScreen(curProduct: curProduct)));
+                          },
+                          horizontalTitleGap: 5,
                           leading: Image.asset(
                             'assets/ZaloLogin.jpg',
                             fit: BoxFit.cover,
@@ -99,17 +110,19 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          trailing: IntrinsicWidth(
+                          trailing: SizedBox(
+                            width: 80,
                             child: Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {
-
-                                  },
-                                  icon: const Icon(Icons.remove),
+                                Flexible(
+                                  child: IconButton(
+                                    onPressed: () {
+                                                            
+                                    },
+                                    icon: const Icon(Icons.remove, size: 20,),
+                                  ),
                                 ),
-                                SizedBox(
-                                  width: 20,
+                                Flexible(
                                   child: TextField(
                                     textAlign: TextAlign.center,
                                     controller: TextEditingController(
@@ -117,16 +130,17 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (value) {
-                                      int newQuantity = int.tryParse(value) ?? 1;
-
+                                      int newQuantity = int.tryParse(value) ?? 1;         
                                     },
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: () {
-
-                                  },
-                                  icon: const Icon(Icons.add),
+                                Flexible(
+                                  child: IconButton(
+                                    onPressed: () {
+                                                            
+                                    },
+                                    icon: const Icon(Icons.add, size: 20,),
+                                  ),
                                 ),
                               ],
                             ),
@@ -149,21 +163,14 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Checkbox(value: true, onChanged: (bool? value) {  },),
-                        const Text('Tất cả'),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Tổng thanh toán: đ',
-                          style: const TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
+                    Flexible(child: Checkbox(value: true, onChanged: (bool? value) {  },)),
+                    const Text('Tất cả'),
+                    Flexible(
+                      child: Text(
+                        'Tổng thanh toán: ${allOrdersTotalAmount} USD',
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                     ),
                   ],
                 ),
