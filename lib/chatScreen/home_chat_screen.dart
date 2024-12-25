@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:toikhoe/database/message_operation.dart';
+
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 import '../database/connection.dart';
 import 'chat_doc_screen.dart';
@@ -13,7 +16,9 @@ class HomeChatScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
-  List<Map<String, String>> _users = [];
+
+  List<Map<dynamic,dynamic>> _users = [];
+
   bool _isLoading = true;
   bool _hasError = false;
 
@@ -25,7 +30,9 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
 
   Future<void> _fetchUsers() async {
     try {
-      final users = await DatabaseService.fetchotherUsers(ref.read(userProvider).first.userId);
+
+      final users = await fetchotherUsers(ref.read(userProvider).first.userId);
+
       setState(() {
         _users = users;
         _isLoading = false;
@@ -42,6 +49,10 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      appBar: AppBar(
+      ),
+
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: Column(
@@ -91,10 +102,12 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
                           builder: (context) {
                             if (user['UserID'] == null || user['name'] == null) {
                               // Xử lý trường hợp dữ liệu không hợp lệ
-                              return const Center(child: Text("Thông tin người dùng ngu"));
+
+                              return const Center(child: Text("Thông tin người dùng không hợp lệ"));
                             }
                             return ChatScreen(
-                              userId: user['UserID']!,
+                              userId: user['userID']!,
+
                               userName: user['name']!,
                             );
                           },
@@ -102,7 +115,9 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
                       );
 
                     },
-                    child: _buildContactCard(user['name']!, 'assets/images/image1.png'),
+
+                    child: _buildContactCard(user['name']!, 'assets/ZaloLogin.jpg'),
+
                   );
                 },
               ),
@@ -181,7 +196,9 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage('assets/images/111.png'),
+
+            backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
+
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -221,4 +238,6 @@ class _HomeChatScreenState extends ConsumerState<HomeChatScreen> {
       ),
     );
   }
+
 }
+

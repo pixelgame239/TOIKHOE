@@ -25,3 +25,10 @@ Future<List<Product>> fetchAllProducts() async {
   }
   return products;
 }
+// Future<Product> fetchSingleProduct() async{
+//   Product singleProduct = Product(productID: 0, name: 'name', description: 'null', price: 0, stock: 0, createdAt: null);
+//   MySqlConnection? conn = await connectToRDS();
+//   if(conn!=null){
+
+//   }
+// }

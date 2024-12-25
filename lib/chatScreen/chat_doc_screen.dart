@@ -2,10 +2,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../database/connection.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/database/message_operation.dart';
+import 'package:toikhoe/riverpod/user_riverpod.dart';
 
-class ChatScreen extends StatefulWidget {
-  final String userId;
+class ChatScreen extends ConsumerStatefulWidget {
+  final int userId;
+
   final String userName;
   const ChatScreen({Key? key, required this.userId, required this.userName}) : super(key: key);
 
@@ -13,36 +16,29 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  late final String _receiverId;
+class _ChatScreenState extends ConsumerState<ChatScreen> {
+  late final int _receiverId;
   late final String _receiverName;
   final List<Map<String, dynamic>> _messages = [];
   final TextEditingController _messageController = TextEditingController();
-  final String _senderId = 'user123'; // Assuming senderId is set here
+  late int _senderId; // Assuming senderId is set here
+
 
   @override
   void initState() {
     super.initState();
+
+    _senderId =  ref.read(userProvider).first.userId;
     _receiverId = widget.userId;
     _receiverName = widget.userName;
-
-    // Ngăn không cho nhắn tin với chính mình
-    if (_senderId == _receiverId) {
-      Future.microtask(() {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Bạn không thể nhắn tin với chính mình!"),
-          ),
-        );
-      });
-    }
 
     _loadMessages();
   }
 
   void _loadMessages() async {
-    final messages = await DatabaseService.fetchMessages(_senderId, _receiverId);
+
+    final messages = await fetchMessages(_senderId, _receiverId);
+
     setState(() {
       _messages.addAll(messages);
     });
@@ -50,7 +46,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _sendMessage() async {
     if (_messageController.text.trim().isNotEmpty) {
-      final message = _messageController.text.trim();
+
+      final message = _messageController.text;
+
       final timestamp = DateTime.now();
 
       setState(() {
@@ -61,7 +59,9 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       });
 
-      await DatabaseService.sendMessage(_senderId, _receiverId, message);
+
+      await sendMessage(_senderId, _receiverId, message);
+
       _messageController.clear();
     }
   }
@@ -230,4 +230,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
 }
+

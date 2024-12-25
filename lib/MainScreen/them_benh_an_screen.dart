@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:toikhoe/database/insert_benh_an.dart';
 import 'package:toikhoe/model/benh_an_model.dart';
 
 class themBenhAnScreen extends StatefulWidget {
@@ -504,29 +505,47 @@ class _themBenhAnScreenState extends State<themBenhAnScreen> {
                 const SizedBox(height: 8),
 
                 // Nút gửi
+
+// Nút gửi
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        BenhAnModel benhAn = BenhAnModel(
-                          ten: _tenController.text,
-                          danToc: _danTocController.text,
-                          ngaySinh: _ngaySinhDate.toIso8601String(),
-                          gender: _gender,
-                          ngayNhapVien: _ngayNhapVienDate.toIso8601String(),
-                          ngayRaVien: _ngayRaVienDate.toIso8601String(),
-                          chanDoanVaoVien: _chanDoanVaoVienController.text,
-                          chanDoanRaVien: _chanDoanRaVienController.text,
-                          soTheBHYT: _soTheBHYTController.text,
-                          hinhAnh: _image != null ? _image!.path : '',
+                        int danTocId =
+                            1; // Thay bằng logic lấy ID từ bảng DanToc
+                        int diaChiId =
+                            1; // Thay bằng logic lấy ID từ bảng DiaChi
+
+                        bool success = await insertBenhAn(
+                          _tenController.text,
+                          danTocId,
+                          _ngaySinhDate,
+                          _gender,
+                          diaChiId,
+                          _soTheBHYTController.text,
+                          _ngayNhapVienDate,
+                          _ngayRaVienDate,
+                          _chanDoanVaoVienController.text,
+                          _chanDoanRaVienController.text,
+                          _liDoVaoVienController.text,
+                          _tomTatQuaTrinhBenhLyController.text,
                         );
-                        // Hiển thị thông báo thành công
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Đã thêm bệnh án cho ${benhAn.ten}'),
-                          ),
-                        );
+
+                        if (success) {
+                          // Hiển thị thông báo thành công
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Đã thêm bệnh án cho ${_tenController.text}'),
+                            ),
+                          );
+                          Navigator.pop(context); // Quay lại màn hình trước đó
+                        } else {
+                          // Hiển thị thông báo lỗi
+                          _showErrorDialog(context,
+                              'Thêm bệnh án thất bại. Vui lòng thử lại.');
+                        }
                       }
                     },
                     child: const Text('Thêm bệnh án'),

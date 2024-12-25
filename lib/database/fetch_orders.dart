@@ -3,31 +3,49 @@ import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/model/order_model.dart';
 
-Future<List<OrderModel>?> fetchAllOrders(int userID, Orders userOrders) async{
+
+Future<List<OrderModel>?> fetchAllOrders(int userID) async{
   MySqlConnection? conn = await connectToRDS();
+  List<OrderModel> listOrders = [];
   if(conn!=null){
-    final result = await conn.query('Select * from Orders where userID=?' [userID]);
+    final result = await conn.query('Select o.*, p.name from Orders o inner join Products p on o.productID = p.productID where o.userID=?', [userID]);
     for(var res in result){
-      OrderModel curOrder = OrderModel(0, userID, 0, 0, 'discountCode', 'paymentStatus', null);
-      curOrder.orderID= res['orderID'];
+      OrderModel curOrder = OrderModel(0, userID, 0, 'productName', 0, 0, 0, 0, 'discountCode', 'paymentStatus', null);
+      curOrder.orderID= res['OrderID'];
+      curOrder.productID = res['productID'];
+      curOrder.productName = res['name'];
+      curOrder.quantity = res['quantity'];
+      curOrder.unitPrice = res['price'];
+
       curOrder.totalAmount = res['totalAmount'];
       curOrder.shippingFee = res['shipping_fee'];
       curOrder.discountCode = res['discount_code'];
-      if(res['paymentStatus']=='Pending'){
+      if (res['paymentStatus'] == 'Pending') {
         curOrder.paymentStatus = 'Đang chờ thanh toán';
-      }
-      else if(res['paymentStatus']=='Paid'){
+      } else if (res['paymentStatus'] == 'Paid') {
         curOrder.paymentStatus = 'Đã thanh toán';
-      }
-      else{
+      } else {
         curOrder.paymentStatus = 'Đã huỷ';
       }
       curOrder.dateAdd = res['created_at'];
-      userOrders.listOrders.add(curOrder);
+      listOrders.add(curOrder);
     }
-    return userOrders.listOrders;
+
+    return listOrders;
   }
   else{
     throw 'Something went wrong';
   }
 }
+Future<void> addOrder(int userID, int productID, int quantity, double price, double totalAmount, double shipping_fee, String discount_code) async{
+  MySqlConnection? conn = await connectToRDS();
+  if(conn!=null){
+    try{
+          await conn.query('Insert into Orders(userID, productID, quantity, price, totalAmount, shipping_fee, discount_code) values (?,?,?,?,?,?,?)', 
+          [userID, productID, quantity, price, totalAmount, shipping_fee, discount_code]);
+    } catch(error){
+      print(error);
+    }
+  }
+}
+
