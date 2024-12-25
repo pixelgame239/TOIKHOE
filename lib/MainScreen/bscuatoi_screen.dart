@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:toikhoe/model/bacsi_model.dart';
-import 'bs_info_screen.dart'; // Import màn hình thông tin bác sĩ
+import 'package:toikhoe/MainScreen/bac_si_detail_screen.dart';
+import 'package:toikhoe/MainScreen/bs_info_screen.dart';
+import 'package:toikhoe/database/fetch_user_doctor.dart';
 
 class MyDoctorScreen extends StatefulWidget {
   @override
@@ -9,132 +9,146 @@ class MyDoctorScreen extends StatefulWidget {
 }
 
 class _MyDoctorScreenState extends State<MyDoctorScreen> {
-  final List<Map<String, String>> doctors = List.generate(6, (index) {
-    return {
-      'name': 'Bác sĩ Lê Công Định',
-      'title': 'Consultant - Bệnh viện Bạch Mai',
-      'rating': '4.2 (78 reviews)',
-      'date': 'Hôm nay',
-    };
-  });
+  List<Map<String, dynamic>> favoriteDoctors = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteDoctors();
+  }
+
+  Future<void> _loadFavoriteDoctors() async {
+    final data = await fetchDoctors();
+    setState(() {
+      favoriteDoctors = data;
+      isLoading = false;
+    });
+  }
+
+  void removeDoctor(int index) {
+    setState(() {
+      favoriteDoctors.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 1,
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
           'Bác sĩ của tôi',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person, color: Colors.red),
-            onPressed: () {},
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
-        ],
+        ),
       ),
-      body: ListView.builder(
-        itemCount: doctors.length,
-        itemBuilder: (context, index) {
-          final doctor = doctors[index];
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  blurRadius: 6,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: screenWidth * 0.08,
-                  backgroundImage: AssetImage('assets/doctor_avatar.png'),
-                ),
-                SizedBox(width: screenWidth * 0.03),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        doctor['name']!,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.04),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        doctor['title']!,
-                        style: TextStyle(color: Colors.grey[600], fontSize: screenWidth * 0.035),
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(Icons.star, color: Colors.amber, size: screenWidth * 0.04),
-                          SizedBox(width: 4),
-                          Text(
-                            doctor['rating']!,
-                            style: TextStyle(fontSize: screenWidth * 0.035),
-                          ),
-                        ],
-                      ),
-                    ],
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : favoriteDoctors.isEmpty
+              ? const Center(
+                  child: Text(
+                    'Không có bác sĩ yêu thích nào.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
-                ),
-                SizedBox(width: screenWidth * 0.02),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Điều hướng sang màn hình thông tin bác sĩ khi nhấn nút
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DoctorDetailScreen(currDoc: BacsiProfile('Id', 'hoten', 'chuyenmon', 0),),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        minimumSize: Size(screenWidth * 0.2, 36),
+                )
+              : ListView.builder(
+                  itemCount: favoriteDoctors.length,
+                  itemBuilder: (context, index) {
+                    final doctor = favoriteDoctors[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: FittedBox(
-                        child: Text(
-                          'Xem hồ sơ',
-                          style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/ZaloLogin.jpg'),
+                              radius: 30,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    doctor['name'] ?? 'N/A',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    doctor['specialization'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.grey[600]),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.star,
+                                          color: Colors.orange, size: 16),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${doctor['experience']} năm',
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BacSiDetailScreen(
+                                          doctorData: doctor,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 6),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  label: const Text(
+                                    'Xem hồ sơ',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Icon(CupertinoIcons.chat_bubble,
-                            color: Colors.grey, size: screenWidth * 0.06),
-                        SizedBox(width: 4),
-                        Text(
-                          doctor['date']!,
-                          style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ],
-            ),
-          );
-        },
-      ),
     );
   }
 }

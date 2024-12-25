@@ -18,6 +18,7 @@ Future<List<Map<String, dynamic>>> fetchAllDoctors() async {
               'experience': row['experience'],
               'working_hours': row['working_hours'],
               'location': row['location'],
+              'isFavourited': row['isFavourited'],
             })
         .toList();
   } catch (e) {

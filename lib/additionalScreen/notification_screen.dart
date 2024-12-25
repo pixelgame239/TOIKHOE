@@ -9,12 +9,15 @@ class NotiScreen extends StatefulWidget {
 }
 
 class _NotiScreenState extends State<NotiScreen> {
+  int _itemCount = 5;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Thông báo'),),
-      body: ListView.builder(
-        itemCount: 5,
+      body: _itemCount==0
+      ? const Center(child: Text('Bạn không có thông báo nào'),)
+      : ListView.builder(
+        itemCount: _itemCount,
         itemBuilder: (context,index){
           return Padding(
             padding: const EdgeInsets.only(bottom: 5),
@@ -25,6 +28,9 @@ class _NotiScreenState extends State<NotiScreen> {
               trailing: IconButton(
               icon: const Icon(CupertinoIcons.clear_circled, color: Colors.red,), 
               onPressed: () {
+                _itemCount--;
+                setState(() {
+                });
               },
               ),
             ),
