@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/MainScreen/bac_si_detail_screen.dart';
 import 'package:toikhoe/database/fetch_bac_si.dart'; // Import hàm fetch từ file fetch_bac_si.dart
 import 'package:toikhoe/database/fetch_user_doctor.dart'; // Import file chứa hàm fetchUsersAndDoctors
 
+// onTap ListTile của BacSiScreen dẫn tới màn hình mới hiển thị toàn bộ
 class BacSiScreen extends ConsumerStatefulWidget {
   const BacSiScreen({super.key});
 
@@ -57,7 +59,29 @@ class _BacSiScreenState extends ConsumerState<BacSiScreen> {
                               : const Icon(Icons.person),
                     ),
                     title: Text(doctor['name'] ?? 'Không rõ'),
-                    subtitle: Text(doctor['specialization'] ?? 'Chưa rõ'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(doctor['specialization'] ?? 'Chưa rõ'),
+                        Text(
+                          doctor['experience'] != null
+                              ? '${doctor['experience']} năm kinh nghiệm'
+                              : 'Kinh nghiệm chưa cập nhật',
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BacSiDetailScreen(
+                            doctorData: doctor,
+                          ),
+                        ),
+                      );
+                    },
+
+                    isThreeLine: true, // Cho phép hiển thị 3 dòng
                   ),
                 );
               },
