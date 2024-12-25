@@ -88,8 +88,8 @@ class _HomeElementState extends State<HomeElement> {
                 ),
               ),
               HomeMenuItem(
-                'Dịch vụ tại nhà',
-                Icons.home,
+                'Lịch nhắc',
+                Icons.calendar_month,
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ReminderApp())),
               ),

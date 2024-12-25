@@ -1,5 +1,8 @@
- import 'package:mysql1/mysql1.dart';
+ import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
+import 'package:toikhoe/model/message_model.dart';
 
 Future<List<Map<String, dynamic>>> fetchMessages(int senderId, int receiverId) async {
     try {
@@ -52,6 +55,17 @@ Future<void> sendMessage(int senderId, int receiverId, String message) async {
       }
     } catch (e) {
       print('Failed to send message: $e');
+    }
+  }
+  Future<int> updateStateMessage(int senderId, int receiverId, WidgetRef ref) async{
+    MySqlConnection? conn = await connectToRDS();
+    if(conn!=null){
+      final count = await conn.query('Select Count(*) as numMes from messages where (sender_id = ? and receiver_id = ?) or (sender_id = ? and receiver_id = ?)', [senderId,receiverId, receiverId, senderId]);
+      await conn.close();
+      return count.first['numMes'];
+    }
+    else{
+      return ref.read(countMessageProvider.notifier).state;
     }
   }
   Future<List<Map<dynamic, dynamic>>> fetchotherUsers(int userId) async {

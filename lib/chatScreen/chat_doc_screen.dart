@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/database/message_operation.dart';
+import 'package:toikhoe/model/message_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -20,7 +21,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final List<Map<String, dynamic>> _messages = [];
   final TextEditingController _messageController = TextEditingController();
   late int _senderId; // Assuming senderId is set here
+  late Timer _pollingTimer;
+  ScrollController messageScroll = ScrollController();
 
+  @override
+  void dispose() {
+    _pollingTimer.cancel();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -28,9 +36,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _receiverId = widget.userId;
     _receiverName = widget.userName;
     _loadMessages();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 1), (timer) async{
+      if(mounted){
+        int currCount = await updateStateMessage(_senderId, _receiverId, ref);
+        if(currCount!=ref.read(countMessageProvider.notifier).state){
+          ref.read(countMessageProvider.notifier).state = currCount;
+          _loadMessages();
+        }
+      }
+    });
+  }
+  void _scrollToBottom(){
+    if (messageScroll.hasClients) {
+      messageScroll.jumpTo(messageScroll.position.maxScrollExtent);
+    }
   }
 
   void _loadMessages() async {
+    _messages.clear();
     final messages = await fetchMessages(_senderId, _receiverId);
     setState(() {
       _messages.addAll(messages);
@@ -41,7 +64,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     if (_messageController.text.trim().isNotEmpty) {
       final message = _messageController.text;
       final timestamp = DateTime.now();
-
       setState(() {
         _messages.add({
           'text': message,
@@ -49,9 +71,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           'timestamp': timestamp,
         });
       });
-
       await sendMessage(_senderId, _receiverId, message);
       _messageController.clear();
+      _scrollToBottom();
     }
   }
 
@@ -87,7 +109,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                     const CircleAvatar(
                       radius: 20,
-                      backgroundImage: AssetImage('assets/images/chat111.png'),
+                      backgroundImage: AssetImage('assets/ZaloLogin.jpg'),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -106,14 +128,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             const SizedBox(height: 10),
 
             // Danh sách tin nhắn
-            Expanded(
+            Flexible(
               child: ListView.builder(
+                controller: messageScroll,
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
                   final bool showTimestamp = _shouldShowTimestamp(index);
                   final bool isSentByMe = message['isSentByMe'];
-
                   return Column(
                     crossAxisAlignment: isSentByMe
                         ? CrossAxisAlignment.end
