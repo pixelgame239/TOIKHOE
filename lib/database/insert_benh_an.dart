@@ -59,6 +59,7 @@ Future<bool> insertBenhAn(
     );
 
     print('Thêm bệnh án thành công: tên bệnh nhân = $ten');
+    await closeConnection(); // Đóng kết nối sau khi thêm thành công
     return true; // Trả về true nếu chèn thành công
   } catch (e) {
     print('Lỗi khi thêm bệnh án: $e'); // Log lỗi
@@ -86,6 +87,7 @@ Future<List<Map<String, dynamic>>> fetchBenhAn() async {
   } catch (e) {
     print('Lỗi khi lấy thông tin bệnh án: $e');
   }
+  await closeConnection(); // Đóng kết nối sau khi thêm thành công
 
   return records;
 }
