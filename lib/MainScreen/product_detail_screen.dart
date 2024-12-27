@@ -76,7 +76,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                   int intQuantity = int.parse(quantityController.text);
                   int userID = ref.read(userProvider).first.userId;
                   try{
-                    await addOrder(userID, widget.curProduct.productID, intQuantity, widget.curProduct.price, (widget.curProduct.price*intQuantity), 0, '');
+                    await addOrder(userID, widget.curProduct.productID, intQuantity, widget.curProduct.price, (widget.curProduct.price*intQuantity), 0, '', ref);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Thêm đơn hàng thành công')));
                     Navigator.pop(context);
                   } catch(error){
