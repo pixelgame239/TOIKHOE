@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:toikhoe/database/message_operation.dart';
-
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 import '../database/connection.dart';
 import 'chat_doc_screen.dart';

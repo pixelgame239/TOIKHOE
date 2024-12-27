@@ -123,6 +123,15 @@ CREATE TABLE BenhAn (
     ngay_cap_nhat TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Ngày cập nhật bản ghi
 );
 
+CREATE TABLE phong_kham (
+    id_phong_kham INT AUTO_INCREMENT PRIMARY KEY,
+    ten_phong_kham VARCHAR(255) NOT NULL,
+    so_luong_review INT DEFAULT 0,
+    sdt VARCHAR(15) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    mo_ta VARCHAR(500)
+);
+
 INSERT INTO BenhAn (
     ten, dan_toc, ngay_sinh, tuoi, gioi_tinh, so_nha, thon_pho, xa_phuong, huyen, tinh_thanh_pho,
     so_the_bhyt, ngay_nhap_vien, ngay_ra_vien, chan_doan_vao_vien, chan_doan_ra_vien,
