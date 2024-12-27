@@ -24,5 +24,7 @@ Future<List<Map<String, dynamic>>> fetchAllDoctors() async {
   } catch (e) {
     print('Lỗi khi lấy thông tin bác sĩ: $e');
     return [];
+  } finally {
+    await closeConnection(); // Đóng kết nối sau khi thêm thành công
   }
 }

@@ -16,6 +16,7 @@ Future<bool> insertUser(String name, String email, String password,
     );
 
     print('Thêm người dùng thành công: email = $email');
+    await closeConnection(); // Đóng kết nối sau khi thêm thành công
     return true; // Trả về true nếu chèn thành công
   } catch (e) {
     print('Lỗi khi thêm người dùng: $e');

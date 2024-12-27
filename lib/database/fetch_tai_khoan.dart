@@ -1,6 +1,5 @@
 import 'package:toikhoe/database/fetch_userID_password.dart';
 
-
 Future<Map<String, dynamic>?> fetchUserByPhoneNumber(String phoneNumber) async {
   if (conn == null) {
     print('Kết nối cơ sở dữ liệu chưa được khởi tạo.');
@@ -20,6 +19,8 @@ Future<Map<String, dynamic>?> fetchUserByPhoneNumber(String phoneNumber) async {
     }
   } catch (e) {
     print('Lỗi khi lấy thông tin người dùng: $e');
+  } finally {
+    await closeConnection(); // Đóng kết nối sau khi hoàn tất
   }
   return null; // Trả về null nếu không tìm thấy
 }
