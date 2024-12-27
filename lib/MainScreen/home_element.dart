@@ -83,12 +83,7 @@ class _HomeElementState extends State<HomeElement> {
               HomeMenuItem(
                 'Hỏi bác sĩ',
                 Icons.chat,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeChatScreen(),
-                  ),
-                ),
+                onTap: () {}
               ),
               HomeMenuItem(
                 'Lịch nhắc',

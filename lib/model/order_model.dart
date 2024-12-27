@@ -26,6 +26,11 @@ class Orders extends StateNotifier<List<OrderModel>>{
        state = orders;
     }
   }
-  void addOrder(int userID, int productID, int quantity, double unitPrice, double totalAmount, double shipping_fee, String? discount_code){
+  void deleteOrder(int orderID){
+    state = state.where((order) => order.orderID != orderID).toList();
+  }
+  void addOrderProvider(int orderID, int userID, int productID, String productName, int quantity, double unitPrice, double totalAmount){
+    OrderModel singOrder = OrderModel(orderID, userID, productID, productName, quantity, unitPrice, totalAmount, 0 , '', 'Pending', DateTime.now());
+    state = [...state, singOrder];
   }
 }

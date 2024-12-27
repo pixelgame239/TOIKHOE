@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/MainScreen/product_detail_screen.dart';
+import 'package:toikhoe/database/fetch_orders.dart';
 import 'package:toikhoe/database/fetch_products.dart';
 import 'package:toikhoe/model/order_model.dart';
 import 'package:toikhoe/model/product_model.dart';
@@ -15,33 +16,25 @@ class MyCartScreen extends ConsumerStatefulWidget {
 
 class MyCartScreenState extends ConsumerState<MyCartScreen> {
   double allOrdersTotalAmount = 0;
+  List<bool> checkOrders = [];
+  bool checkAllOrders= false;
   @override
   void initState() {
     super.initState();
     int userID = ref.read(userProvider).first.userId;
     ref.read(ordersProvider.notifier).fetchuserOrders(userID);
+    checkOrders =List<bool>.generate(ref.read(ordersProvider).length,(index)=>false);
   }
 
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(ordersProvider);
-    for(var order in orders){
-      allOrdersTotalAmount+=order.totalAmount;
-    }
+    // for(var order in orders){
+    //   allOrdersTotalAmount+=order.totalAmount;
+    // }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Giỏ hàng'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Thực hiện sửa toàn bộ
-            },
-            child: const Text(
-              'Sửa',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
-        ],
       ),
       body: orders.isEmpty
           ? const Center(
@@ -66,20 +59,54 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                             Row(
                               children: [
                                 Checkbox(
-                                  value: true,
-                                  onChanged: (bool? value) {
-
+                                  value: checkOrders[index],
+                                  onChanged: (value) {
+                                    checkOrders[index]  = value!;
+                                    if(checkOrders.every((checked)=>checked==true)){
+                                      checkAllOrders=true;
+                                      setState(() {
+                                      });
+                                    }
+                                    else{
+                                      checkAllOrders=false;
+                                      setState(() {
+                                      });
+                                    }
+                                    if(checkOrders[index]==true){
+                                      setState(() {
+                                        allOrdersTotalAmount+=order.totalAmount;
+                                      });
+                                    }
+                                    else if(checkOrders[index]==false){
+                                      setState(() {
+                                        allOrdersTotalAmount-=order.totalAmount;
+                                      });
+                                    }
                                   },
                                 ),
-                                Text(
+                                const Text(
                                   "Cửa hàng",
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                             IconButton(
                               onPressed: () {
-
+                                showDialog(context: context, builder: (context)=>AlertDialog(
+                                  title: const Text('Bạn có đồng ý xoá sản phẩm này khỏi giỏ hàng'),
+                                        actions: [
+                                          TextButton(onPressed: () async{
+                                            await deleteOrder(order.orderID, ref);
+                                            checkOrders.length = orders.length;
+                                            setState(() {
+                                            });
+                                            Navigator.pop(context);
+                                          }, child: const Text('Đồng ý xoá!', style: TextStyle(color: Colors.red),)),
+                                          TextButton(onPressed: (){
+                                            Navigator.pop(context);
+                                          }, child: const Text('Huỷ'))
+                                        ],
+                                      ));
                               },
                               icon: const Icon(Icons.delete, color: Colors.grey),
                             ),
@@ -117,7 +144,7 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                 Flexible(
                                   child: IconButton(
                                     onPressed: () {
-                                                            
+
                                     },
                                     icon: const Icon(Icons.remove, size: 20,),
                                   ),
@@ -130,7 +157,11 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (value) {
-                                      int newQuantity = int.tryParse(value) ?? 1;         
+                                      int newQuantity = int.tryParse(value) ?? 1;   
+                                      order.quantity = newQuantity;
+                                      order.totalAmount = order.unitPrice*order.quantity;
+                                      setState(() {
+                                      });      
                                     },
                                   ),
                                 ),
@@ -163,11 +194,34 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(child: Checkbox(value: true, onChanged: (bool? value) {  },)),
+                    Flexible(child: Checkbox(
+                      value: checkAllOrders, 
+                      onChanged: (value) {
+                      if(value!=null){
+                      checkAllOrders = value;
+                        for(int i = 0; i<checkOrders.length; i++){
+                          checkOrders[i]=value;
+                        }
+                        if(checkAllOrders){
+                           allOrdersTotalAmount = 0.0; // Reset the total
+                                  for (int i = 0; i < checkOrders.length; i++) {
+                                    if (checkOrders[i]) {
+                                      allOrdersTotalAmount +=
+                                          orders[i].totalAmount;
+                                    }
+                    }
+                        }
+                        else{
+                          allOrdersTotalAmount=0.0;
+                        }
+                        setState(() {
+                        });
+                      }
+                     },)),
                     const Text('Tất cả'),
                     Flexible(
                       child: Text(
-                        'Tổng thanh toán: ${allOrdersTotalAmount} USD',
+                        'Tổng thanh toán: ${allOrdersTotalAmount.abs().toStringAsFixed(2)} USD',
                         style: const TextStyle(
                             color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
