@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
+import 'package:toikhoe/database/fetch_userID_password.dart';
 import 'package:toikhoe/model/order_model.dart';
 
-
-Future<List<OrderModel>?> fetchAllOrders(int userID) async{
+Future<List<OrderModel>?> fetchAllOrders(int userID) async {
   MySqlConnection? conn = await connectToRDS();
   List<OrderModel> listOrders = [];
-  if(conn!=null){
-    final result = await conn.query('Select o.*, p.name from Orders o inner join Products p on o.productID = p.productID where o.userID=?', [userID]);
-    for(var res in result){
-      OrderModel curOrder = OrderModel(0, userID, 0, 'productName', 0, 0, 0, 0, 'discountCode', 'paymentStatus', null);
-      curOrder.orderID= res['OrderID'];
+  if (conn != null) {
+    final result = await conn.query(
+        'Select o.*, p.name from Orders o inner join Products p on o.productID = p.productID where o.userID=?',
+        [userID]);
+    for (var res in result) {
+      OrderModel curOrder = OrderModel(0, userID, 0, 'productName', 0, 0, 0, 0,
+          'discountCode', 'paymentStatus', null);
+      curOrder.orderID = res['OrderID'];
       curOrder.productID = res['productID'];
       curOrder.productName = res['name'];
       curOrder.quantity = res['quantity'];
@@ -31,38 +34,61 @@ Future<List<OrderModel>?> fetchAllOrders(int userID) async{
       curOrder.dateAdd = res['created_at'];
       listOrders.add(curOrder);
     }
+    await closeConnection();
 
     return listOrders;
-  }
-  else{
+  } else {
     throw 'Something went wrong';
   }
 }
-Future<void> addOrder(int userID, int productID, int quantity, double price, double totalAmount, double shipping_fee, String discount_code, WidgetRef ref) async{
+
+Future<void> addOrder(
+    int userID,
+    int productID,
+    int quantity,
+    double price,
+    double totalAmount,
+    double shipping_fee,
+    String discount_code,
+    WidgetRef ref) async {
   MySqlConnection? conn = await connectToRDS();
-  if(conn!=null){
-    try{
-          await conn.query('Insert into Orders(userID, productID, quantity, price, totalAmount, shipping_fee, discount_code) values (?,?,?,?,?,?,?)', 
-          [userID, productID, quantity, price, totalAmount, shipping_fee, discount_code]);
-      final result = await conn.query('Select o.*, p.name from Orders o inner join Products p on o.productID = p.productID Order by OrderID desc limit 1');
-      for(var res in result){
-        ref.read(ordersProvider.notifier).addOrderProvider(res['OrderID'], userID, productID, res['name'], quantity, price, totalAmount);
+  if (conn != null) {
+    try {
+      await conn.query(
+          'Insert into Orders(userID, productID, quantity, price, totalAmount, shipping_fee, discount_code) values (?,?,?,?,?,?,?)',
+          [
+            userID,
+            productID,
+            quantity,
+            price,
+            totalAmount,
+            shipping_fee,
+            discount_code
+          ]);
+      final result = await conn.query(
+          'Select o.*, p.name from Orders o inner join Products p on o.productID = p.productID Order by OrderID desc limit 1');
+      for (var res in result) {
+        ref.read(ordersProvider.notifier).addOrderProvider(res['OrderID'],
+            userID, productID, res['name'], quantity, price, totalAmount);
       }
-    } catch(error){
+    } catch (error) {
       print(error);
-    }
-  }
-}
-Future<void> deleteOrder(int orderID, WidgetRef ref) async {
-  MySqlConnection? conn = await connectToRDS();
-  if(conn!=null){
-    try{
-      await conn.query('Delete from Orders where OrderID = ?', [orderID]);
-      ref.read(ordersProvider.notifier).deleteOrder(orderID);
-    }
-    catch(error){
-      print(error);
+    } finally {
+      await closeConnection();
     }
   }
 }
 
+Future<void> deleteOrder(int orderID, WidgetRef ref) async {
+  MySqlConnection? conn = await connectToRDS();
+  if (conn != null) {
+    try {
+      await conn.query('Delete from Orders where OrderID = ?', [orderID]);
+      ref.read(ordersProvider.notifier).deleteOrder(orderID);
+    } catch (error) {
+      print(error);
+    } finally {
+      await closeConnection();
+    }
+  }
+}

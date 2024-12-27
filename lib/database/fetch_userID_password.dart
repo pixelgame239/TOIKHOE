@@ -12,6 +12,21 @@ Future<void> initializeConnection() async {
   }
 }
 
+Future<void> closeConnection() async {
+  if (conn != null) {
+    try {
+      await conn!.close();
+      print('Đã đóng kết nối thành công!');
+    } catch (e) {
+      print('Lỗi khi đóng kết nối: $e');
+    } finally {
+      conn = null; // Đặt về null để tránh tái sử dụng kết nối đã đóng
+    }
+  } else {
+    print('Không có kết nối để đóng.');
+  }
+}
+
 Future<List<Map<String, String>>> fetchTaiKhoanInfo() async {
   List<Map<String, String>> accounts = [];
 
@@ -37,6 +52,8 @@ Future<List<Map<String, String>>> fetchTaiKhoanInfo() async {
     print('Lấy thông tin tài khoản thành công: $accounts');
   } catch (e) {
     print('Lỗi khi lấy thông tin tài khoản: $e');
+  } finally {
+    await closeConnection(); // Đóng kết nối sau khi hoàn tất
   }
 
   return accounts;

@@ -1,5 +1,6 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
+import 'package:toikhoe/database/fetch_userID_password.dart';
 
 Future<List<Map<String, dynamic>>> fetchUsersAndDoctors() async {
   final conn = await connectToRDS();
@@ -166,7 +167,7 @@ Future<List<Map<String, dynamic>>> fetchDoctors() async {
     print('Lỗi khi lấy dữ liệu: $e');
     return [];
   } finally {
-    await conn.close();
+    await closeConnection();
     print('Kết nối đã được đóng.');
   }
 }
