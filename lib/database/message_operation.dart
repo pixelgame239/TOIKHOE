@@ -27,6 +27,7 @@ Future<List<Map<String, dynamic>>> fetchMessages(int senderId, int receiverId) a
       );
       final messages = results.map((row) {
         return {
+          'senderID': row['sender_id'],
           'text': row['message'],
           'isSentByMe': row['sender_id'] == senderId,
           'timestamp': row['timestamp'],
