@@ -97,7 +97,7 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                         actions: [
                                           TextButton(onPressed: () async{
                                             await deleteOrder(order.orderID, ref);
-                                            checkOrders.length = orders.length;
+                                            checkOrders.length = ref.read(ordersProvider).length;
                                             setState(() {
                                             });
                                             Navigator.pop(context);
