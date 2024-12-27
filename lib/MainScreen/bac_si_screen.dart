@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toikhoe/MainScreen/bac_si_detail_screen.dart';
-import 'package:toikhoe/database/fetch_bac_si.dart'; // Import hàm fetch từ file fetch_bac_si.dart
+// Import hàm fetch từ file fetch_bac_si.dart
 import 'package:toikhoe/database/fetch_user_doctor.dart'; // Import file chứa hàm fetchUsersAndDoctors
 
 // onTap ListTile của BacSiScreen dẫn tới màn hình mới hiển thị toàn bộ

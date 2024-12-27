@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/fetch_products.dart';
 
 class Product extends ChangeNotifier {
@@ -31,33 +30,40 @@ class Product extends ChangeNotifier {
     );
   }
 }
-final listProductProvider = StateNotifierProvider<ListProduct, List<Product>>((ref) {
+
+final listProductProvider =
+    StateNotifierProvider<ListProduct, List<Product>>((ref) {
   return ListProduct([]);
 });
-class SingleProduct extends StateNotifier<Product>{
+
+class SingleProduct extends StateNotifier<Product> {
   SingleProduct(super.state);
-  Future<void> fetchSingleProduct() async{
+  Future<void> fetchSingleProduct() async {
     // Product singleProduct = await fetchSingleProduct();
   }
 }
+
 class ListProduct extends StateNotifier<List<Product>> {
   ListProduct(List<Product> state) : super(state);
 
-  Future<void> fetchProducts() async{
+  Future<void> fetchProducts() async {
     List<Product> products = await fetchAllProducts();
     state = products;
   }
+
   void addProduct(Product singleProduct) {
     state = [...state, singleProduct];
   }
-   void removeProduct(int productId) {
+
+  void removeProduct(int productId) {
     state = state.where((product) => product.productID != productId).toList();
   }
 
   // Modify a product in the list
   void modifyProduct(Product modifiedProduct) {
-    final index = state.indexWhere((product) => product.productID == modifiedProduct.productID);
-    
+    final index = state.indexWhere(
+        (product) => product.productID == modifiedProduct.productID);
+
     if (index != -1) {
       state = [
         ...state.sublist(0, index),
@@ -67,4 +73,3 @@ class ListProduct extends StateNotifier<List<Product>> {
     }
   }
 }
-

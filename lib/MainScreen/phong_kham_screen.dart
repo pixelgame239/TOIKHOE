@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:toikhoe/MainScreen/phong_kham_detail_screen.dart';
 import 'package:toikhoe/database/fetch_phong_kham.dart';
 
@@ -60,12 +59,15 @@ class ClinicScreen extends StatelessWidget {
                     itemCount: clinics.length,
                     itemBuilder: (context, index) {
                       final clinic = clinics[index];
-                      return ClinicCard(
-                        name: clinic['ten_phong_kham'],
-                        reviews: clinic['so_luong_review'].toString(),
-                        phone: clinic['sdt'],
-                        email: clinic['email'],
-                        description: clinic['mo_ta'],
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClinicCard(
+                          name: clinic['ten_phong_kham'],
+                          reviews: clinic['so_luong_review'].toString(),
+                          phone: clinic['sdt'],
+                          email: clinic['email'],
+                          description: clinic['mo_ta'],
+                        ),
                       );
                     },
                   );

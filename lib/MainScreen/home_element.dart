@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:toikhoe/MainScreen/bac_si_screen.dart';
 import 'package:toikhoe/MainScreen/benh_an_screen.dart';
 import 'package:toikhoe/MainScreen/bsck_Screen.dart';
 import 'package:toikhoe/MainScreen/bscuatoi_screen.dart';
 import 'package:toikhoe/MainScreen/bsyeuthich_screen.dart';
 import 'package:toikhoe/MainScreen/phong_kham_screen.dart';
-import 'package:toikhoe/chatScreen/home_chat_screen.dart';
 import 'package:toikhoe/reminderScreen/nhac_nho_screen.dart';
 
+// ignore: unused_import
 import '../chatScreen/home_chat_screen.dart';
 
 class HomeElement extends StatefulWidget {
@@ -80,11 +78,7 @@ class _HomeElementState extends State<HomeElement> {
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ClinicScreen())),
               ),
-              HomeMenuItem(
-                'Hỏi bác sĩ',
-                Icons.chat,
-                onTap: () {}
-              ),
+              HomeMenuItem('Hỏi bác sĩ', Icons.chat, onTap: () {}),
               HomeMenuItem(
                 'Lịch nhắc',
                 Icons.calendar_month,

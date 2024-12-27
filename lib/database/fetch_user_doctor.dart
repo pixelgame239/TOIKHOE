@@ -1,4 +1,3 @@
-import 'package:mysql1/mysql1.dart';
 import 'package:toikhoe/database/connection.dart';
 import 'package:toikhoe/database/fetch_userID_password.dart';
 

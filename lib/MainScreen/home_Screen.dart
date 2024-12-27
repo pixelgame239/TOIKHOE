@@ -8,11 +8,8 @@ import 'package:toikhoe/MainScreen/tmdt_screen.dart';
 import 'package:toikhoe/additionalScreen/mycart_screen.dart';
 import 'package:toikhoe/additionalScreen/notification_screen.dart';
 import 'package:toikhoe/additionalScreen/profile_screen.dart';
-import 'package:toikhoe/database/fetch_products.dart';
 import 'package:toikhoe/model/navigationbar_control.dart';
-import 'package:toikhoe/model/product_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
-import 'package:toikhoe/MainScreen/booking_screen.dart';
 import 'package:toikhoe/chatScreen/home_chat_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -43,8 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const BacSiScreen();
     } else if (currentIndex == 3) {
       return const HomeChatScreen();
-    }
-      else if (currentIndex == 2) {
+    } else if (currentIndex == 2) {
       return BookingScreen();
     } else {}
 
@@ -111,7 +107,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: Builder(
         builder: (context) {
-          if (currentIndex == 4 || currentIndex == 1 || currentIndex == 3 || currentIndex == 2) {
+          if (currentIndex == 4 ||
+              currentIndex == 1 ||
+              currentIndex == 3 ||
+              currentIndex == 2) {
             return _screen(currentIndex) ?? const SizedBox.shrink();
           } else {
             return SingleChildScrollView(

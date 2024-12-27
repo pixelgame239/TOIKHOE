@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:toikhoe/database/insert_benh_an.dart';
+// ignore: unused_import
 import 'package:toikhoe/model/benh_an_model.dart';
 
 class themBenhAnScreen extends StatefulWidget {

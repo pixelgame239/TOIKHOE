@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:toikhoe/MainScreen/benh_an_detail_screen.dart';
 import 'package:toikhoe/database/insert_benh_an.dart';
 import 'package:toikhoe/mainScreen/them_benh_an_screen.dart';
-import 'package:toikhoe/database/fetch_userID_password.dart';
 
 class MedicalRecordsScreen extends StatefulWidget {
   const MedicalRecordsScreen({super.key});
