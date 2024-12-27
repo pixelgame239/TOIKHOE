@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:toikhoe/MainScreen/phong_kham_detail_screen.dart';
+import 'package:toikhoe/database/fetch_phong_kham.dart';
 
 class ClinicScreen extends StatelessWidget {
   @override
@@ -20,6 +22,9 @@ class ClinicScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              onChanged: (value) {
+                // Thêm logic tìm kiếm tại đây
+              },
               decoration: InputDecoration(
                 hintText: "Nhập để tìm kiếm...",
                 prefixIcon: Icon(Icons.search),
@@ -37,15 +42,36 @@ class ClinicScreen extends StatelessWidget {
                 _buildCategoryButton("Răng hàm mặt", false),
                 _buildCategoryButton("Siêu âm", false),
                 _buildCategoryButton("Khoa nhi", false),
-                _buildCategoryButton("Tài mũi họng", false),
+                _buildCategoryButton("Tai mũi họng", false),
               ],
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return ClinicCard();
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchPhongKham(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Lỗi: ${snapshot.error}"));
+                } else if (snapshot.hasData) {
+                  final clinics = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: clinics.length,
+                    itemBuilder: (context, index) {
+                      final clinic = clinics[index];
+                      return ClinicCard(
+                        name: clinic['ten_phong_kham'],
+                        reviews: clinic['so_luong_review'].toString(),
+                        phone: clinic['sdt'],
+                        email: clinic['email'],
+                        description: clinic['mo_ta'],
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: Text("Không có dữ liệu."));
+                }
               },
             ),
           ),
@@ -85,6 +111,20 @@ class ClinicScreen extends StatelessWidget {
 }
 
 class ClinicCard extends StatelessWidget {
+  final String name;
+  final String reviews;
+  final String phone;
+  final String email;
+  final String? description;
+
+  ClinicCard({
+    required this.name,
+    required this.reviews,
+    required this.phone,
+    required this.email,
+    this.description,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -114,42 +154,60 @@ class ClinicCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "CODY HEALTH",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Text(
+                          name,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      Spacer(),
-                      Icon(Icons.star, color: Colors.orange, size: 16),
-                      Text(" 4.3"),
                     ],
                   ),
-                  Text("2.859 Google review"),
-                  SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.orange, size: 16),
+                      SizedBox(width: 5),
+                      Text(" ${reviews} Google review"),
+                    ],
+                  ),
                   Row(
                     children: [
                       Icon(Icons.phone, size: 14),
                       SizedBox(width: 5),
-                      Text("+84 012345678"),
+                      Text(phone),
                     ],
                   ),
                   Row(
                     children: [
                       Icon(Icons.email, size: 14),
                       SizedBox(width: 5),
-                      Text("Contact@medlife.com"),
+                      Text(email),
                     ],
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Phòng khám Y học Cổ Truyền\nChăm sóc và chữa bệnh hiệu quả",
+                    description ?? "Không có mô tả",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => phongKhamDetailScreen(
+                              name: name,
+                              reviews: reviews,
+                              phone: phone,
+                              email: email,
+                              description: description,
+                            ),
+                          ),
+                        );
+                      },
                       child: Text("Xem chi tiết"),
                     ),
                   ),

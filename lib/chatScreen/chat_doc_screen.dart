@@ -35,11 +35,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
-
     _senderId =  ref.read(userProvider).first.userId;
     _receiverId = widget.userId;
     _receiverName = widget.userName;
-
     _loadMessages();
     _pollingTimer = Timer.periodic(const Duration(seconds: 1), (timer) async{
       if(mounted){
@@ -60,7 +58,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void _loadMessages() async {
     _messages.clear();
     final messages = await fetchMessages(_senderId, _receiverId);
-
     setState(() {
       _messages.addAll(messages);
     });
@@ -74,6 +71,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       final timestamp = DateTime.now();
       setState(() {
         _messages.add({
+          'senderID': ref.read(userProvider).first.userId,
           'text': message,
           'isSentByMe': true,
           'timestamp': timestamp,
@@ -165,7 +163,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         ),
                       _buildMessageBubble(
                         text: message['text'],
-                        isSentByMe: isSentByMe,
+                        senderID: int.parse(message['senderID']),
                       ),
                     ],
                   );
@@ -224,18 +222,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildMessageBubble({required String text, required bool isSentByMe}) {
+  Widget _buildMessageBubble({required String text, required int senderID}) {
     return Align(
-      alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: senderID == ref.read(userProvider).first.userId ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.all(12),
         constraints: const BoxConstraints(maxWidth: 250),
         decoration: BoxDecoration(
-          color: isSentByMe ? Colors.blue.shade100 : Colors.grey.shade300,
+          color: senderID == ref.read(userProvider).first.userId ? Colors.blue.shade100 : Colors.grey.shade300,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isSentByMe ? 15 : 0),
-            topRight: Radius.circular(isSentByMe ? 0 : 15),
+            topLeft: Radius.circular(senderID == ref.read(userProvider).first.userId ? 15 : 0),
+            topRight: Radius.circular(senderID == ref.read(userProvider).first.userId ? 0 : 15),
             bottomLeft: const Radius.circular(15),
             bottomRight: const Radius.circular(15),
           ),
