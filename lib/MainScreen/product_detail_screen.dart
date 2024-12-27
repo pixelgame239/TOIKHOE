@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:toikhoe/MainScreen/buy_screen.dart';
 import 'package:toikhoe/database/fetch_orders.dart';
+import 'package:toikhoe/model/order_model.dart';
 import 'package:toikhoe/model/product_model.dart';
 import 'package:toikhoe/riverpod/user_riverpod.dart';
 
@@ -85,9 +86,11 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 }, child: const Text('Đặt mua'))
                 ]
                 else...[
-                  ElevatedButton(onPressed: (){
+                  ElevatedButton(onPressed: () async{
                     int intQuantity = int.parse(quantityController.text);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>BuyScreen(buyProduct: widget.curProduct, quantity: intQuantity)));
+                    await addOrder(ref.read(userProvider).first.userId, widget.curProduct.productID, intQuantity, widget.curProduct.price, (widget.curProduct.price*intQuantity), 0, '', ref);
+                    OrderModel singleOrder= ref.read(ordersProvider).last;
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>BuyScreen(buyProducts: [singleOrder], isCart: false,)));
                   }, child: const Text('Mua ngay'))
                 ]
               ],
