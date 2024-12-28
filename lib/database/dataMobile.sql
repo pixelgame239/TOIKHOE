@@ -132,6 +132,18 @@ CREATE TABLE phong_kham (
     mo_ta VARCHAR(500)
 );
 
+CREATE TABLE LichKhamBenh (
+    LichKhamID INT AUTO_INCREMENT PRIMARY KEY, -- Khóa chính, tự tăng
+    NgayDatLich DATE NOT NULL,                 -- Ngày đặt lịch khám
+    GioDatLich TIME NOT NULL,                  -- Giờ đặt lịch khám
+    UserID INT NOT NULL,                       -- ID người dùng (liên kết với bảng Users)
+    DiaChi VARCHAR(255) NOT NULL,              -- Địa chỉ khám bệnh
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Thời gian tạo bản ghi
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Thời gian cập nhật bản ghi
+    CONSTRAINT FK_UserID FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 INSERT INTO BenhAn (
     ten, dan_toc, ngay_sinh, tuoi, gioi_tinh, so_nha, thon_pho, xa_phuong, huyen, tinh_thanh_pho,
     so_the_bhyt, ngay_nhap_vien, ngay_ra_vien, chan_doan_vao_vien, chan_doan_ra_vien,

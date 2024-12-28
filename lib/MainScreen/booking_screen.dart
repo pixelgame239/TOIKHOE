@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/MainScreen/home_screen.dart';
+import 'package:toikhoe/database/insert_lich_kham.dart';
+import 'package:toikhoe/riverpod/user_riverpod.dart';
 
-class BookingScreen extends StatefulWidget {
+class BookingScreen extends ConsumerStatefulWidget {
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _BookingScreenState extends ConsumerState<BookingScreen> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   String? selectedAddress;
@@ -74,7 +78,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   void _editAddress(int index) {
     TextEditingController addressController =
-    TextEditingController(text: savedAddresses[index]);
+        TextEditingController(text: savedAddresses[index]);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -136,13 +140,17 @@ class _BookingScreenState extends State<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).isNotEmpty
+        ? ref.watch(userProvider).first
+        : null;
     return Scaffold(
       appBar: AppBar(
         title: Text('Đặt dịch vụ'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
           },
         ),
       ),
@@ -164,7 +172,8 @@ class _BookingScreenState extends State<BookingScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
-              Text('Chọn lịch', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('Chọn lịch',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               ElevatedButton(
                 onPressed: _pickDate,
@@ -173,7 +182,8 @@ class _BookingScreenState extends State<BookingScreen> {
                     : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'),
               ),
               SizedBox(height: 16),
-              Text('Chọn thời gian', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('Chọn thời gian',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               ElevatedButton(
                 onPressed: _pickTime,
@@ -182,7 +192,8 @@ class _BookingScreenState extends State<BookingScreen> {
                     : '${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}'),
               ),
               SizedBox(height: 16),
-              Text('Chọn địa chỉ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('Chọn địa chỉ',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               Column(
                 children: savedAddresses.asMap().entries.map((entry) {
@@ -224,26 +235,52 @@ class _BookingScreenState extends State<BookingScreen> {
                 children: [
                   OutlinedButton(
                     onPressed: () {
-                      // Xử lý khi nhấn nút Hủy
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
                     },
                     child: Text('Hủy'),
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (selectedDate != null &&
                           selectedTime != null &&
                           selectedAddress != null) {
-                        String date =
-                            '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}';
-                        String time =
-                            '${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}';
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'Đã chọn: $date lúc $time, tại $selectedAddress'),
-                        ));
+                        String formattedDate =
+                            '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+                        DateTime dateTime = DateTime(
+                          selectedDate!.year,
+                          selectedDate!.month,
+                          selectedDate!.day,
+                          selectedTime!.hour,
+                          selectedTime!.minute,
+                        );
+
+                        bool result = await insertLichKhamBenh(
+                          dateTime,
+                          user!.userId, // Giả sử `user` có thuộc tính `UserID`
+                          selectedAddress!,
+                        );
+
+                        if (result) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Đặt lịch thành công: $formattedDate lúc ${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}, tại $selectedAddress'),
+                          ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Có lỗi xảy ra khi đặt lịch.'),
+                          ));
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Vui lòng chọn đầy đủ ngày, giờ và địa chỉ'),
+                          content:
+                              Text('Vui lòng chọn đầy đủ ngày, giờ và địa chỉ'),
                         ));
                       }
                     },
