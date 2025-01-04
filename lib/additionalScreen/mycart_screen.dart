@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toikhoe/MainScreen/buy_screen.dart';
 import 'package:toikhoe/MainScreen/product_detail_screen.dart';
 import 'package:toikhoe/database/fetch_orders.dart';
 import 'package:toikhoe/database/fetch_products.dart';
@@ -18,6 +19,7 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
   double allOrdersTotalAmount = 0;
   List<bool> checkOrders = [];
   bool checkAllOrders= false;
+  List<OrderModel> buyProducts=[];
   @override
   void initState() {
     super.initState();
@@ -74,11 +76,13 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                     }
                                     if(checkOrders[index]==true){
                                       setState(() {
+                                        buyProducts.add(order);
                                         allOrdersTotalAmount+=order.totalAmount;
                                       });
                                     }
                                     else if(checkOrders[index]==false){
                                       setState(() {
+                                        buyProducts.removeWhere((item)=>item.orderID==order.orderID);
                                         allOrdersTotalAmount-=order.totalAmount;
                                       });
                                     }
@@ -208,10 +212,12 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                                     if (checkOrders[i]) {
                                       allOrdersTotalAmount +=
                                           orders[i].totalAmount;
+                                          buyProducts.add(orders[i]);
                                     }
                     }
                         }
                         else{
+                          buyProducts.clear();
                           allOrdersTotalAmount=0.0;
                         }
                         setState(() {
@@ -230,7 +236,12 @@ class MyCartScreenState extends ConsumerState<MyCartScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Xử lý thanh toán
+                    if(buyProducts.isEmpty){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Chưa có sản phẩm nào được chọn')));
+                    }
+                    else{
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>BuyScreen(buyProducts: buyProducts, isCart: true,)));
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 32.0),
